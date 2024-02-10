@@ -1,0 +1,18 @@
+
+ - slip-mongo
+  - follow go mongo
+  - mapping from mongo types to lisp as well as bag
+   - bag/json is a more familiar format for most
+   - use $oid, $toDate, $toLong, etc in bag https://www.mongodb.com/docs/manual/reference/operator/aggregation/toDate/
+    - also $convert
+  - support watch with a channel
+   - set up go routine to call ChangeStream.Next and place on channel
+    - or maybe just pass the changestream back and let the user decide
+  - readme describing approach
+   - bson vs simple vs lisp
+    - D => assoc => map-withlimits or maybe make D amd M the same
+    - bag is easier for nested maps
+     - visually, constructing, and accessing
+   - example use
+   - watch with change-stream instance
+   - no bulk write

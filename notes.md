@@ -1,18 +1,13 @@
 
 - next
 
- - use flavors.FlosFun to create functions
-
- - mongo-connect (url &key user password timeout)
-  - return instance of mongo-client
-
  - flavors
   - mongo-client
-   - :database (name)
-   - :disconnect
-   - :databases (filter)
-    - call ListDatabases and make assoc with key as the name
-   - :ping - options in the future
+   + mongo-connect (url &key user password timeout)
+   + :database (name)
+   + :disconnect
+   + :databases (filter)
+   + :ping
    - :watch
   - mongo-database
    - :aggregate
@@ -21,7 +16,7 @@
    - :create-view
    - :drop
    - :collections (filter) ;; collection specifications
-   - :name
+   + :name
    - :watch
   - mongo-change-stream
    - :close

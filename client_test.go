@@ -9,6 +9,7 @@ import (
 
 	"github.com/ohler55/ojg/tt"
 	"github.com/ohler55/slip"
+	"github.com/ohler55/slip/sliptest"
 )
 
 func TestClientDocs(t *testing.T) {
@@ -28,6 +29,32 @@ func TestClientDocs(t *testing.T) {
 	}
 }
 
-func TestClientFoo(t *testing.T) {
-	fmt.Printf("*** mongoURL: %s\n", mongoURL)
+func TestClientPing(t *testing.T) {
+	scope := slip.NewScope()
+	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
+	scope.Let(slip.Symbol("mc"), nil)
+	defer func() {
+		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+	}()
+
+	(&sliptest.Function{
+		Scope:  scope,
+		Source: `(progn (setq mc (mongo-connect murl :timeout 3)) (list (send mc :ping) (mongo-ping mc)))`,
+		Expect: "(t t)",
+	}).Test(t)
+}
+
+func TestClientDatabase(t *testing.T) {
+	scope := slip.NewScope()
+	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
+	scope.Let(slip.Symbol("mc"), nil)
+	defer func() {
+		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+	}()
+
+	(&sliptest.Function{
+		Scope:  scope,
+		Source: `(progn (setq mc (mongo-connect murl :timeout 3)) (send mc :database "test"))`,
+		Expect: "/#<mongo-database [0-9a-f]+>/",
+	}).Test(t)
 }

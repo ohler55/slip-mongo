@@ -3,6 +3,7 @@
 package main_test
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"os"
@@ -11,11 +12,13 @@ import (
 	"syscall"
 	"testing"
 	"time"
+
+	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
 	mongoURL string
-	mongoPID int
 )
 
 func TestMain(m *testing.M) {
@@ -55,11 +58,12 @@ func wrapRun(m *testing.M) (status int) {
 }
 
 func startMongoServer() (proc *os.Process) {
+	// export TEST_MONGO_URL=mongodb://localhost:27017 to use a local mongod
 	mongoURL, _ = os.LookupEnv("TEST_MONGO_URL")
 	if len(mongoURL) == 0 {
 		dbpath := "mongo-data"
 		_ = os.RemoveAll(dbpath)
-		if err := os.Mkdir(dbpath, 0666); err != nil {
+		if err := os.Mkdir(dbpath, 0755); err != nil {
 			panic(err)
 		}
 		port := availablePort()
@@ -69,6 +73,22 @@ func startMongoServer() (proc *os.Process) {
 			panic(err)
 		}
 		proc = cmd.Process
+	}
+	ctx, cf := context.WithTimeout(context.Background(), time.Second*10)
+	defer cf()
+
+	opts := options.Client()
+	opts = opts.ApplyURI(string(mongoURL))
+	mc, err := mongo.Connect(ctx, opts)
+	if err != nil {
+		panic(err)
+	}
+	start := time.Now()
+	for time.Since(start) < time.Second*5 {
+		if mc.Ping(ctx, nil) == nil {
+			break
+		}
+		time.Sleep(time.Millisecond * 100)
 	}
 	return
 }

@@ -1,15 +1,61 @@
 
 - next
- - mongo-connect (url &key user password timeout)
-  - return instance of mongo-client
-   - should the "-flavor" be left off? for this and others - yes
-   -
+
  - flavors
   - mongo-client
+   + mongo-connect (url &key user password timeout)
+   + :database (name)
+   + :disconnect
+   + :databases (filter)
+   + :ping
+   - :watch
+--------- database branch
   - mongo-database
+   - :aggregate
+   + :client
+   - :collection (name)
+   - :create-view
+   - :drop
+   - :collections (filter) ;; collection specifications
+   + :name
+   - :watch
   - mongo-change-stream
+   - :close
+   - :decode
+   - :error
+   - :identifier ;; id in mongo
+   - :next
+   - :set-batch-size
+   - :resume-token
+   - :try-next
   - mongo-collection
+   - :aggregate
+   - :bulk-write ;; maybe don't implement yet
+   - :clone
+   - :count-documents
+   - :database
+   - :delete-many
+   - :delete-one
+   - :distinct
+   - :drop
+   - :estimated-document-count
+   - :find
+   - :find-one
+   - :find-one-and-delete
+   - :find-one-and-replace
+   - :find-one-and-update
+   - :indexes
+   - :insert-many
+   - :name
+   - :replace-one
+   - :search-indexes
+   - :update-by-id
+   - :update-many
+   - :update-one
+   - :watch
 
+ - future sessions managed by clients
+  - used for transactions
 
 
  - watch with change-stream instance

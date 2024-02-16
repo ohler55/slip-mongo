@@ -9,9 +9,10 @@
    + :databases (filter)
    + :ping
    - :watch
+--------- database branch
   - mongo-database
    - :aggregate
-   - :client
+   + :client
    - :collection (name)
    - :create-view
    - :drop

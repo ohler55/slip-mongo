@@ -31,24 +31,13 @@ func init() {
 				},
 				{Name: "&key"},
 				{
-					Name: "user",
-					Type: "string",
-					Text: `for the connection authentication`,
-				},
-				{
-					Name: "password",
-					Type: "string",
-					Text: `for the connection authentication`,
-				},
-				{
 					Name: "timeout",
 					Type: "fixnum",
 					Text: "is the number of seconds to wait before giving up",
 				},
 			},
 			Return: "mongo-client",
-			Text: `__mongo-connect__ attempts to connect to a mongo database server using
-the _user_ and _password_ along with the _url_.`,
+			Text:   `__mongo-connect__ attempts to connect to a mongo database server with the _url_.`,
 			Examples: []string{
 				`(mongo-connect "mongodb://localhost:27017/test") => #<mongo-client 12345>`,
 			},
@@ -62,20 +51,10 @@ type Connect struct {
 
 // Call the function with the arguments provided.
 func (f *Connect) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
-	slip.ArgCountCheck(f, args, 1, 7)
+	slip.ArgCountCheck(f, args, 1, 3)
 	timeout := defaultTimeout
 	opts := options.Client()
 	opts = opts.ApplyURI(string(slip.MustBeString(args[0], "url")))
-	var auth options.Credential
-	if ss, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":user")); has {
-		auth.Username = slip.MustBeString(ss, ":user")
-	}
-	if ss, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":password")); has {
-		auth.Password = slip.MustBeString(ss, ":password")
-	}
-	if 0 < len(auth.Username) || 0 < len(auth.Password) {
-		opts.SetAuth(auth)
-	}
 	if v, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":timeout")); has {
 		if num, ok := v.(slip.Fixnum); ok {
 			timeout = time.Second * time.Duration(num)

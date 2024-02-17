@@ -25,9 +25,7 @@ func ToBson(value any) (bs any) {
 	// (simplified) and the types expected in a simplified value. After that
 	// the common lisp types. The remainder follow the more common.
 	switch tv := value.(type) {
-	case string:
-		bs = tv
-	case bool:
+	case string, bool, float64, int32:
 		bs = tv
 	case int64:
 		if math.MinInt32 <= tv && tv <= math.MaxInt32 {
@@ -42,14 +40,50 @@ func ToBson(value any) (bs any) {
 		}
 		bs = a
 	case map[string]any:
-		// TBD handle {$timestamp: 12345} and others like $decimal128
+		if len(tv) == 1 {
+			var (
+				key string
+				v   any
+			)
+			for key, v = range tv {
+			}
+			switch strings.ToLower(key) {
+			case "$timestamp":
+				if nsec, ok := v.(int64); ok {
+					bs = time.Unix(0, nsec)
+				}
+			case "$decimal128":
+				if str, ok := v.(string); ok {
+					if dec, err := primitive.ParseDecimal128(str); err == nil {
+						bs = dec
+					}
+				}
+			case "$uuid":
+				if str, ok := v.(string); ok {
+					pb := primitive.Binary{Subtype: bson.TypeBinaryUUID}
+					var err error
+					if pb.Data, err = hex.DecodeString(str); err == nil {
+						bs = pb
+					}
+				}
+			case "$md5":
+				if str, ok := v.(string); ok {
+					pb := primitive.Binary{Subtype: bson.TypeBinaryMD5}
+					var err error
+					if pb.Data, err = hex.DecodeString(str); err == nil {
+						bs = pb
+					}
+				}
+			}
+			if bs != nil {
+				break
+			}
+		}
 		m := bson.M{}
 		for k, e := range tv {
 			m[k] = ToBson(e)
 		}
 		bs = m
-	case float64:
-		bs = tv
 	case nil:
 		bs = primitive.Null{}
 	case time.Time:
@@ -105,8 +139,6 @@ func ToBson(value any) (bs any) {
 		bs = int32(tv)
 	case int16:
 		bs = int32(tv)
-	case int32:
-		bs = tv
 	case uint:
 		if tv <= math.MaxInt32 {
 			bs = int32(tv)
@@ -229,7 +261,6 @@ func SimplifyBson(bs any, wrap bool) (sv any) {
 			sv = map[string]any{"$decimal128": sv}
 		}
 	case primitive.Timestamp:
-		// $timestamp is not a mongo operation
 		sv = int64(uint64(tb.T)<<32 | uint64(tb.I))
 		if wrap {
 			sv = map[string]any{"$timestamp": sv}
@@ -357,7 +388,6 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 			}
 		}
 	case primitive.Timestamp:
-		// $timestamp is not a mongo operation
 		obj = slip.Fixnum(uint64(tv.T)<<32 | uint64(tv.I))
 		if wrap {
 			obj = slip.List{slip.List{slip.String("$timestamp"), slip.Tail{Value: obj}}}

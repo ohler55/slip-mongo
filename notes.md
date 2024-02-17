@@ -1,9 +1,6 @@
 
 - next
 
-- bson
- - add $timestamp and other support in ToBson
-  - any others?
 
  - flavors
   - mongo-collection
@@ -11,11 +8,11 @@
    - :bulk-write ;; maybe don't implement yet
    - :clone
    - :count-documents
-   - :database
+   + :database
    - :delete-many
    - :delete-one
    - :distinct
-   - :drop
+   + :drop
    - :estimated-document-count
    - :find
    - :find-one
@@ -24,7 +21,7 @@
    - :find-one-and-update
    - :indexes
    - :insert-many
-   - :name
+   + :name
    - :replace-one
    - :search-indexes
    - :update-by-id

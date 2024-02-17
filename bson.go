@@ -24,6 +24,7 @@ func ToBson(value any) (bs any) {
 	// Address the most likely cases first assuming the contents of a bag
 	// (simplified) and the types expected in a simplified value. After that
 	// the common lisp types. The remainder follow the more common.
+retry:
 	switch tv := value.(type) {
 	case string, bool, float64, int32:
 		bs = tv
@@ -50,7 +51,10 @@ func ToBson(value any) (bs any) {
 			switch strings.ToLower(key) {
 			case "$timestamp":
 				if nsec, ok := v.(int64); ok {
-					bs = time.Unix(0, nsec)
+					bs = primitive.Timestamp{
+						T: uint32(uint64(nsec) >> 32),
+						I: uint32(uint64(nsec) & 0x00000000FFFFFFFF),
+					}
 				}
 			case "$decimal128":
 				if str, ok := v.(string); ok {
@@ -60,10 +64,8 @@ func ToBson(value any) (bs any) {
 				}
 			case "$uuid":
 				if str, ok := v.(string); ok {
-					pb := primitive.Binary{Subtype: bson.TypeBinaryUUID}
-					var err error
-					if pb.Data, err = hex.DecodeString(str); err == nil {
-						bs = pb
+					if u := gi.UUIDParse(str); u[0] != 0 || u[1] != 0 {
+						bs = primitive.Binary{Subtype: bson.TypeBinaryUUID, Data: u.Bytes()}
 					}
 				}
 			case "$md5":
@@ -87,7 +89,7 @@ func ToBson(value any) (bs any) {
 	case nil:
 		bs = primitive.Null{}
 	case time.Time:
-		bs = primitive.DateTime(tv.UTC().UnixNano())
+		bs = primitive.NewDateTimeFromTime(tv.UTC())
 
 	case slip.Symbol:
 		if strings.EqualFold(":false", string(tv)) {
@@ -111,6 +113,7 @@ func ToBson(value any) (bs any) {
 				}
 				d[i] = bson.E{Key: key, Value: ToBson(cons.Cdr())}
 			}
+			bs = d
 		} else {
 			a := make(bson.A, len(tv))
 			for i, e := range tv {
@@ -127,7 +130,12 @@ func ToBson(value any) (bs any) {
 	case slip.DoubleFloat:
 		bs = float64(tv)
 	case slip.Time:
-		bs = primitive.DateTime(time.Time(tv).UTC().UnixNano())
+		bs = primitive.NewDateTimeFromTime(time.Time(tv).UTC())
+	case gi.UUID:
+		bs = primitive.Binary{Subtype: bson.TypeBinaryUUID, Data: tv.Bytes()}
+	case slip.Tail:
+		value = tv.Value
+		goto retry
 
 	case int:
 		if math.MinInt32 <= tv && tv <= math.MaxInt32 {
@@ -165,7 +173,7 @@ func ToBson(value any) (bs any) {
 		bs = float64(tv)
 	case float32:
 		bs = float64(tv)
-	case slip.LongFloat:
+	case *slip.LongFloat:
 		bs = tv.String()
 
 	case *flavors.Instance:
@@ -254,7 +262,7 @@ func SimplifyBson(bs any, wrap bool) (sv any) {
 	case primitive.Symbol:
 		sv = string(tb)
 	case primitive.DateTime:
-		sv = tb.Time()
+		sv = tb.Time().UTC()
 	case primitive.Decimal128:
 		sv = tb.String()
 		if wrap {
@@ -266,12 +274,20 @@ func SimplifyBson(bs any, wrap bool) (sv any) {
 			sv = map[string]any{"$timestamp": sv}
 		}
 	case primitive.Regex:
-		sv = tb.Pattern
+		if 0 < len(tb.Options) {
+			rx := make([]byte, 0, len(tb.Pattern)+1+len(tb.Options))
+			rx = append(rx, tb.Pattern...)
+			rx = append(rx, '/')
+			rx = append(rx, tb.Options...)
+			sv = string(rx)
+		} else {
+			sv = tb.Pattern
+		}
 	case primitive.JavaScript:
 		sv = string(tb)
 	case primitive.Binary:
 		switch tb.Subtype {
-		case bson.TypeBinaryUUID:
+		case bson.TypeBinaryUUID, bson.TypeBinaryUUIDOld:
 			var b []byte
 			for i, v := range tb.Data {
 				b = append(b, hexChars[v>>4], hexChars[v&0x0f])
@@ -316,7 +332,7 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 	case float64:
 		obj = slip.DoubleFloat(tv)
 	case time.Time:
-		obj = slip.Time(tv)
+		obj = slip.Time(tv.UTC())
 	case primitive.ObjectID:
 		obj = slip.String(tv.Hex())
 		if wrap {
@@ -377,7 +393,7 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 	case primitive.Symbol:
 		obj = slip.Symbol(tv)
 	case primitive.DateTime:
-		obj = slip.Time(tv.Time())
+		obj = slip.Time(tv.Time().UTC())
 	case primitive.Decimal128:
 		if bi, exp, err := tv.BigInt(); err == nil && exp == 0 {
 			obj = (*slip.Bignum)(bi)
@@ -393,7 +409,15 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 			obj = slip.List{slip.List{slip.String("$timestamp"), slip.Tail{Value: obj}}}
 		}
 	case primitive.Regex:
-		obj = slip.String(tv.Pattern)
+		if 0 < len(tv.Options) {
+			rx := make([]byte, 0, len(tv.Pattern)+1+len(tv.Options))
+			rx = append(rx, tv.Pattern...)
+			rx = append(rx, '/')
+			rx = append(rx, tv.Options...)
+			obj = slip.String(rx)
+		} else {
+			obj = slip.String(tv.Pattern)
+		}
 	case primitive.JavaScript:
 		obj = slip.String(tv)
 	case primitive.Binary:

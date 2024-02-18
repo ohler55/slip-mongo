@@ -1,6 +1,12 @@
 
 - next
 
+ - insert-one
+ - find-one
+
+ - how to make read only, maybe just a view?
+
+ - database :create-view
 
  - flavors
   - mongo-collection
@@ -21,6 +27,7 @@
    - :find-one-and-update
    - :indexes
    - :insert-many
+   - :insert-one
    + :name
    - :replace-one
    - :search-indexes

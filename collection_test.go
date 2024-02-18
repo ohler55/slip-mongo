@@ -80,3 +80,23 @@ func TestCollectionDropError(t *testing.T) {
 		PanicType: slip.Symbol("error"),
 	}).Test(t)
 }
+
+func TestCollectionInsertFindOne(t *testing.T) {
+	scope := slip.NewScope()
+	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
+	scope.Let(slip.Symbol("mc"), nil)
+	defer func() {
+		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+	}()
+
+	(&sliptest.Function{
+		Scope: scope,
+		Source: `(progn
+                  (setq mc (mongo-connect murl :timeout 3))
+                  (let* ((db (send mc :database "quux"))
+                         (col (send db :collection "cool")))
+                   (send col :insert-one '((a . 1)))
+                   (send col :find-one '((a . 1)) :native t)))`,
+		Expect: `/\(\("_id" . "[0-9a-f]+"\) \("a" . 1\)\)/`,
+	}).Test(t)
+}

@@ -7,6 +7,8 @@ import (
 
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/flavors"
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -19,10 +21,14 @@ func (caller collectionInsertOneCaller) Call(s *slip.Scope, args slip.List, _ in
 	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":wrap")); has && value != nil {
 		wrap = true
 	}
+	filter := ToBson(args[0])
+	if _, ok := filter.(primitive.Null); ok || filter == nil {
+		filter = bson.D{}
+	}
 	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
 	defer cf()
 
-	if ior, err := self.Any.(*mongo.Collection).InsertOne(ctx, ToBson(args[0])); err == nil {
+	if ior, err := self.Any.(*mongo.Collection).InsertOne(ctx, filter); err == nil {
 		id = BsonToObject(ior.InsertedID, wrap)
 	} else {
 		panic(err)

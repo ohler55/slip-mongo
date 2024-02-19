@@ -1,8 +1,7 @@
 
 - next
 
- - insert-one
- - find-one
+ - update-one
 
  - how to make read only, maybe just a view?
 
@@ -44,6 +43,13 @@
    - :set-batch-size
    - :resume-token
    - :try-next
+
+ - actors
+  - find-one
+  - insert-one
+  - update-one
+  - generic
+   - method, filter, keys
 
  - future sessions managed by clients
   - used for transactions

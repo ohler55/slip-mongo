@@ -111,8 +111,8 @@ func init() {
 	// collectionFlavor.DefMethod(":update-many", "", collectionUpdateManyCaller{})
 	// flavors.FlosFun("mongo-collection-update-many", ":update-many", collectionUpdateManyCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":update-one", "", collectionUpdateOneCaller{})
-	// flavors.FlosFun("mongo-collection-update-one", ":update-one", collectionUpdateOneCaller{}.Docs())
+	collectionFlavor.DefMethod(":update-one", "", collectionUpdateOneCaller{})
+	flavors.FlosFun("mongo-collection-update-one", ":update-one", collectionUpdateOneCaller{}.Docs())
 
 	// collectionFlavor.DefMethod(":watch", "", collectionWatchCaller{})
 	// flavors.FlosFun("mongo-collection-watch", ":watch", collectionWatchCaller{}.Docs())

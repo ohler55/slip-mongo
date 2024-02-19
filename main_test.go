@@ -13,6 +13,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/ohler55/slip"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -105,4 +106,14 @@ func availablePort() int {
 	defer listener.Close()
 
 	return listener.Addr().(*net.TCPAddr).Port
+}
+
+func testWithConnect(t *testing.T, fun func(t *testing.T, scope *slip.Scope)) {
+	scope := slip.NewScope()
+	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
+	scope.Let(slip.Symbol("mc"), slip.ReadString(`(mongo-connect murl :timeout 3)`).Eval(scope, nil))
+	defer func() {
+		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+	}()
+	fun(t, scope)
 }

@@ -20,14 +20,14 @@
    - :distinct
    + :drop
    - :estimated-document-count
-   - :find
-   - :find-one
+   + :find
+   + :find-one
    - :find-one-and-delete
    - :find-one-and-replace
    - :find-one-and-update
    - :indexes
    - :insert-many
-   - :insert-one
+   + :insert-one
    + :name
    - :replace-one
    - :search-indexes

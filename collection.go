@@ -66,8 +66,8 @@ func init() {
 	// 	":estimated-document-count",
 	// 	collectionEstimatedDocumentCountCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":find", "", collectionFindCaller{})
-	// flavors.FlosFun("mongo-collection-find", ":find", collectionFindCaller{}.Docs())
+	collectionFlavor.DefMethod(":find", "", collectionFindCaller{})
+	flavors.FlosFun("mongo-collection-find", ":find", collectionFindCaller{}.Docs())
 
 	collectionFlavor.DefMethod(":find-one", "", collectionFindOneCaller{})
 	flavors.FlosFun("mongo-collection-find-one", ":find-one", collectionFindOneCaller{}.Docs())

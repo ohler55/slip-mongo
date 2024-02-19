@@ -1,7 +1,8 @@
 
 - next
 
- - update-one
+ - :insert-many
+ - :update-many
 
  - how to make read only, maybe just a view?
 
@@ -24,7 +25,7 @@
    - :find-one-and-delete
    - :find-one-and-replace
    - :find-one-and-update
-   - :indexes
+   - :indexes ;; return mongo-indexes instance
    - :insert-many
    + :insert-one
    + :name
@@ -32,8 +33,15 @@
    - :search-indexes
    - :update-by-id
    - :update-many
-   - :update-one
+   + :update-one
    - :watch
+  - indexes
+   - create
+    - create one, don't bother with create many
+   - drop
+    - if with name then drop one else drop all
+   - list
+
   - mongo-change-stream
    - :close
    - :decode

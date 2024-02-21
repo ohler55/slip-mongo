@@ -1,8 +1,9 @@
 
 - next
 
- - :insert-many
- - :update-many
+ - :distinct (field filter) => list
+ - :count-documents (filter &key limit skip) => fixnum
+ - :estimated-document-count () => fixnum
 
  - how to make read only, maybe just a view?
 
@@ -17,7 +18,6 @@
    + :database
    - :delete-many
    - :delete-one
-   - :distinct
    + :drop
    - :estimated-document-count
    + :find
@@ -26,21 +26,22 @@
    - :find-one-and-replace
    - :find-one-and-update
    - :indexes ;; return mongo-indexes instance
-   - :insert-many
+   + :insert-many
    + :insert-one
    + :name
    - :replace-one
    - :search-indexes
    - :update-by-id
-   - :update-many
+   + :update-many
    + :update-one
    - :watch
-  - indexes
-   - create
+
+  - mongo-indexes
+   - :create
     - create one, don't bother with create many
-   - drop
+   - :drop
     - if with name then drop one else drop all
-   - list
+   - :list
 
   - mongo-change-stream
    - :close

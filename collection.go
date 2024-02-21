@@ -93,8 +93,8 @@ func init() {
 	// collectionFlavor.DefMethod(":indexes", "", collectionIndexesCaller{})
 	// flavors.FlosFun("mongo-collection-indexes", ":indexes", collectionIndexesCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":insert-many", "", collectionInsertManyCaller{})
-	// flavors.FlosFun("mongo-collection-insert-many", ":insert-many", collectionInsertManyCaller{}.Docs())
+	collectionFlavor.DefMethod(":insert-many", "", collectionInsertManyCaller{})
+	flavors.FlosFun("mongo-collection-insert-many", ":insert-many", collectionInsertManyCaller{}.Docs())
 
 	collectionFlavor.DefMethod(":insert-one", "", collectionInsertOneCaller{})
 	flavors.FlosFun("mongo-collection-insert-one", ":insert-one", collectionInsertOneCaller{}.Docs())
@@ -108,8 +108,8 @@ func init() {
 	// collectionFlavor.DefMethod(":update-by-id", "", collectionUpdateByIDCaller{})
 	// flavors.FlosFun("mongo-collection-update-by-id", ":update-by-id", collectionUpdateByIDCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":update-many", "", collectionUpdateManyCaller{})
-	// flavors.FlosFun("mongo-collection-update-many", ":update-many", collectionUpdateManyCaller{}.Docs())
+	collectionFlavor.DefMethod(":update-many", "", collectionUpdateManyCaller{})
+	flavors.FlosFun("mongo-collection-update-many", ":update-many", collectionUpdateManyCaller{}.Docs())
 
 	collectionFlavor.DefMethod(":update-one", "", collectionUpdateOneCaller{})
 	flavors.FlosFun("mongo-collection-update-one", ":update-one", collectionUpdateOneCaller{}.Docs())

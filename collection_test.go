@@ -22,7 +22,9 @@ func TestCollectionDocs(t *testing.T) {
 		":drop",
 		":find",
 		":find-one",
+		":insert-many",
 		":insert-one",
+		":update-many",
 		":update-one",
 	} {
 		_ = slip.ReadString(fmt.Sprintf(`(describe-method mongo-collection %s out)`, method)).Eval(scope, nil)

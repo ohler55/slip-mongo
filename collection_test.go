@@ -18,12 +18,19 @@ func TestCollectionDocs(t *testing.T) {
 	scope.Let(slip.Symbol("out"), &slip.OutputStream{Writer: &out})
 
 	for _, method := range []string{
-		":name",
+		":count-documents",
+		":delete-many",
+		":delete-one",
+		":distinct",
 		":drop",
+		":estimated-document-count",
 		":find",
 		":find-one",
 		":insert-many",
 		":insert-one",
+		":name",
+		":replace-one",
+		":update-by-id",
 		":update-many",
 		":update-one",
 	} {

@@ -1,25 +1,23 @@
 
 - next
 
- - :distinct (field filter) => list
- - :count-documents (filter &key limit skip) => fixnum
- - :estimated-document-count () => fixnum
-
- - how to make read only, maybe just a view?
-
- - database :create-view
+ - :aggregate (function pipeline &key allow-disk-use batch-size)
+ - :find-one-and-delete (filter &key projection sort)
+ - :find-one-and-replace (filter replacement &key projection sort before)
+ - :find-one-and-update (filter update &key projection sort before)
 
  - flavors
   - mongo-collection
    - :aggregate
-   - :bulk-write ;; maybe don't implement yet
-   - :clone
-   - :count-documents
+   x :bulk-write ;; maybe don't implement yet
+   x :clone ;; don't implement
+   + :count-documents
    + :database
-   - :delete-many
-   - :delete-one
+   + :delete-many
+   + :delete-one
+   + :distinct
    + :drop
-   - :estimated-document-count
+   + :estimated-document-count
    + :find
    + :find-one
    - :find-one-and-delete
@@ -29,12 +27,39 @@
    + :insert-many
    + :insert-one
    + :name
-   - :replace-one
+   + :replace-one
    - :search-indexes
-   - :update-by-id
+   + :update-by-id
    + :update-many
    + :update-one
    - :watch
+
+----------
+ - indexes branch
+  - collection :indexes
+  - mongo-indexes flavor
+
+----------
+ - actor branch
+  - load lisp code
+  - test driver
+  - various actors
+
+----------
+ - watch branch
+  - collection :watch
+  - mongo-change-stream flavor
+
+----------
+ - search-indexes branch
+  - collection :search-indexes
+  - mongo-search-indexes flavor
+
+----------
+ - database :create-view
+ - how to make read only, maybe just a view?
+
+-----------------------------------------------
 
   - mongo-indexes
    - :create
@@ -42,6 +67,14 @@
    - :drop
     - if with name then drop one else drop all
    - :list
+
+  - mongo-search-indexes
+   - :create
+    - create one, don't bother with create many
+   - :drop
+    - if with name then drop one else drop all
+   - :list
+   - :update
 
   - mongo-change-stream
    - :close
@@ -54,10 +87,17 @@
    - :try-next
 
  - actors
-  - find-one
-  - insert-one
-  - update-one
-  - generic
+  - lisp code
+   - set slip.CurrentPackage then compile (defer to set back)
+   - separate lisp file for each
+   - maybe a test driver for actors (copied from one repo to the next)
+    - use slip test package
+   - use fs to load
+  - mongo-find-one-actor
+  - mongo-find-actor
+  - mongo-insert-actor
+  - mongo-update-actor
+  - mongo-actor
    - method, filter, keys
 
  - future sessions managed by clients

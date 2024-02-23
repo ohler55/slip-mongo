@@ -20,7 +20,7 @@ func TestCollectionFindBasic(t *testing.T) {
                       (send col :insert-one '((a . 1) (b . 4)))
                       (send col :insert-one '((a . 2) (b . 8)))
                       (send col :find (lambda (rec) (setq results (add results (cadr rec)))) nil
-                                     :native t :wrap t :projection '((b . t)) :sort '((b . -1)))
+                                      :native t :wrap t :projection '((b . t)) :sort '((b . -1)))
                       results)`,
 			Expect: `(("b" . 8) ("b" . 4) ("b" . 2))`,
 		}).Test(t)
@@ -38,14 +38,28 @@ func TestCollectionFindKeys(t *testing.T) {
                       (send col :insert-one '((a . 1) (b . 4)))
                       (send col :insert-one '((a . 2) (b . 8)))
                       (send col :find (lambda (rec) (setq results (add results (bag-get rec "b")))) nil
-                                     :projection '((b . t))
-                                     :sort '((b . 1))
-                                     :skip 1
-                                     :limit 1
-                                     :allow-disk-use t
-                                     :batch 4)
+                                      :projection '((b . t))
+                                      :sort '((b . 1))
+                                      :skip 1
+                                      :limit 1
+                                      :allow-disk-use t
+                                      :batch 4)
                       results)`,
 			Expect: `(4)`,
+		}).Test(t)
+	})
+}
+
+func TestCollectionFindNone(t *testing.T) {
+	testWithConnect(t, func(t *testing.T, scope *slip.Scope) {
+		(&sliptest.Function{
+			Scope: scope,
+			Source: `(let* ((db (send mc :database "quux"))
+                            (col (send db :collection "cool-find-empty"))
+                            (results nil))
+                      (send col :find (lambda (rec) (setq results (add results (cadr rec)))) nil :native t)
+                      results)`,
+			Expect: `nil`,
 		}).Test(t)
 	})
 }
@@ -82,6 +96,18 @@ func TestCollectionFindBadBatch(t *testing.T) {
                             (col (send db :collection "cool-find")))
                       (send col :find (lambda (rec) nil) nil :batch t))`,
 			PanicType: slip.Symbol("type-error"),
+		}).Test(t)
+	})
+}
+
+func TestCollectionFindBadFilter(t *testing.T) {
+	testWithConnect(t, func(t *testing.T, scope *slip.Scope) {
+		(&sliptest.Function{
+			Scope: scope,
+			Source: `(let* ((db (send mc :database "quux"))
+                            (col (send db :collection "cool-find")))
+                       (send col :find (lambda (rec) nil) '(1)))`,
+			PanicType: slip.Symbol("error"),
 		}).Test(t)
 	})
 }

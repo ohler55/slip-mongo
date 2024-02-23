@@ -48,7 +48,6 @@ func TestCollectionInsertManyWrap(t *testing.T) {
 			Validate: func(t *testing.T, v slip.Object) {
 				list := v.(slip.List)
 				tt.Equal(t, 3, len(list))
-				ids := list[0].(slip.List)
 				tt.Equal(t,
 					fmt.Sprintf(`(("_id" . %s) ("a" . 1))`, list[0].(slip.List)[0].(slip.List)[0].(slip.List).Cdr()),
 					slip.ObjectString(list[1]))

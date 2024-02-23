@@ -12,20 +12,20 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type collectionUpdateOneCaller struct{}
+type collectionReplaceOneCaller struct{}
 
-func (caller collectionUpdateOneCaller) Call(s *slip.Scope, args slip.List, _ int) (count slip.Object) {
+func (caller collectionReplaceOneCaller) Call(s *slip.Scope, args slip.List, _ int) (count slip.Object) {
 	self := s.Get("self").(*flavors.Instance)
 
 	filter := ToBson(args[0])
 	if _, ok := filter.(primitive.Null); ok || filter == nil {
 		filter = bson.D{}
 	}
-	update := ToBson(args[1])
+	replace := ToBson(args[1])
 	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
 	defer cf()
 
-	if ur, err := self.Any.(*mongo.Collection).UpdateOne(ctx, filter, update); err == nil {
+	if ur, err := self.Any.(*mongo.Collection).ReplaceOne(ctx, filter, replace); err == nil {
 		count = slip.Fixnum(ur.ModifiedCount)
 	} else {
 		panic(err)
@@ -33,14 +33,14 @@ func (caller collectionUpdateOneCaller) Call(s *slip.Scope, args slip.List, _ in
 	return
 }
 
-func (caller collectionUpdateOneCaller) Docs() string {
-	return `__:update-one__ _filter_ _update_ => _fixnum_
-   _filter_ [bag|list] that selects the records to be updated.
-   _update_ [bag|list] the modification directives to apply a record.
+func (caller collectionReplaceOneCaller) Docs() string {
+	return `__:replace-one__ _filter_ _replacement_ => _fixnum_
+   _filter_ [bag|list] that selects the records to be replaced.
+   _replacement_ [bag|list] the new document to replace the first existing match.
 
 
 If _filter_ is an instance of the _bag-flavor_ then the contents of the
 instance is the filter. If a _list_ then the list is converted to mongodb bson
-and used as the filter. The number of records modified is returned.
+and used as the filter. The number of records replaced is returned.
 `
 }

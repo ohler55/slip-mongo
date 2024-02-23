@@ -48,23 +48,23 @@ func init() {
 	// collectionFlavor.DefMethod(":clone", "", collectionCloneCaller{})
 	// flavors.FlosFun("mongo-collection-clone", ":clone", collectionCloneCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":count-documents", "", collectionCountDocumentsCaller{})
-	// flavors.FlosFun("mongo-collection-count-documents", ":count-documents", collectionCountDocumentsCaller{}.Docs())
+	collectionFlavor.DefMethod(":count-documents", "", collectionCountDocumentsCaller{})
+	flavors.FlosFun("mongo-collection-count-documents", ":count-documents", collectionCountDocumentsCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":delete-many", "", collectionDeleteManyCaller{})
-	// flavors.FlosFun("mongo-collection-delete-many", ":delete-many", collectionDeleteManyCaller{}.Docs())
+	collectionFlavor.DefMethod(":delete-many", "", collectionDeleteManyCaller{})
+	flavors.FlosFun("mongo-collection-delete-many", ":delete-many", collectionDeleteManyCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":delete-one", "", collectionDeleteOneCaller{})
-	// flavors.FlosFun("mongo-collection-delete-one", ":delete-one", collectionDeleteOneCaller{}.Docs())
+	collectionFlavor.DefMethod(":delete-one", "", collectionDeleteOneCaller{})
+	flavors.FlosFun("mongo-collection-delete-one", ":delete-one", collectionDeleteOneCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":distinct", "", collectionDistinctCaller{})
-	// flavors.FlosFun("mongo-collection-distinct", ":distinct", collectionDistinctCaller{}.Docs())
+	collectionFlavor.DefMethod(":distinct", "", collectionDistinctCaller{})
+	flavors.FlosFun("mongo-collection-distinct", ":distinct", collectionDistinctCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":estimated-document-count", "", collectionEstimatedDocumentCountCaller{})
-	// flavors.FlosFun(
-	// 	"mongo-collection-estimated-document-count",
-	// 	":estimated-document-count",
-	// 	collectionEstimatedDocumentCountCaller{}.Docs())
+	collectionFlavor.DefMethod(":estimated-document-count", "", collectionEstimatedDocumentCountCaller{})
+	flavors.FlosFun(
+		"mongo-collection-estimated-document-count",
+		":estimated-document-count",
+		collectionEstimatedDocumentCountCaller{}.Docs())
 
 	collectionFlavor.DefMethod(":find", "", collectionFindCaller{})
 	flavors.FlosFun("mongo-collection-find", ":find", collectionFindCaller{}.Docs())
@@ -99,14 +99,14 @@ func init() {
 	collectionFlavor.DefMethod(":insert-one", "", collectionInsertOneCaller{})
 	flavors.FlosFun("mongo-collection-insert-one", ":insert-one", collectionInsertOneCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":replace-one", "", collectionReplaceOneCaller{})
-	// flavors.FlosFun("mongo-collection-replace-one", ":replace-one", collectionReplaceOneCaller{}.Docs())
+	collectionFlavor.DefMethod(":replace-one", "", collectionReplaceOneCaller{})
+	flavors.FlosFun("mongo-collection-replace-one", ":replace-one", collectionReplaceOneCaller{}.Docs())
 
 	// collectionFlavor.DefMethod(":search-indexes", "", collectionSearchIndexesCaller{})
 	// flavors.FlosFun("mongo-collection-search-indexes", ":search-indexes", collectionSearchIndexesCaller{}.Docs())
 
-	// collectionFlavor.DefMethod(":update-by-id", "", collectionUpdateByIDCaller{})
-	// flavors.FlosFun("mongo-collection-update-by-id", ":update-by-id", collectionUpdateByIDCaller{}.Docs())
+	collectionFlavor.DefMethod(":update-by-id", "", collectionUpdateByIDCaller{})
+	flavors.FlosFun("mongo-collection-update-by-id", ":update-by-id", collectionUpdateByIDCaller{}.Docs())
 
 	collectionFlavor.DefMethod(":update-many", "", collectionUpdateManyCaller{})
 	flavors.FlosFun("mongo-collection-update-many", ":update-many", collectionUpdateManyCaller{}.Docs())

@@ -22,10 +22,11 @@ var (
 func init() {
 	Pkg.Initialize(nil)
 	slip.AddPackage(&Pkg)
+	initIndexes()
+	initCollection()
+	initDatabase()
 	initClient()
 	initConnect()
-	initDatabase()
-	initCollection()
 	// Loading the LISP file requires functions in several packages so have
 	// this package use the necessary ones.
 	Pkg.Use(&slip.CLPkg)

@@ -1,11 +1,6 @@
 
 - next
 
- - defun and others in a package
-  - use-package make other not available
- - maybe allow package cross use/import
- - better, how can it be done in sbcl?
-
  - flavors
   - mongo-collection
    + :aggregate
@@ -37,7 +32,12 @@
 ----------
  - indexes branch
   - collection :indexes
-  - mongo-indexes flavor
+  - mongo-indexes
+   - :create (keys &key background expire-after name sparse unique language)
+    - keys is an assoc (key . 1)
+   - :drop (&optional name)
+    - if with name then drop one else drop all
+   - :list
 
 ----------
  - actor branch
@@ -59,13 +59,6 @@
  - how to make read only, maybe just a view?
 
 -----------------------------------------------
-
-  - mongo-indexes
-   - :create
-    - create one, don't bother with create many
-   - :drop
-    - if with name then drop one else drop all
-   - :list
 
   - mongo-search-indexes
    - :create

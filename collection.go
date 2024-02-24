@@ -87,8 +87,8 @@ func initCollection() {
 		collectionFindOneAndUpdateCaller{}.Docs(),
 		&Pkg)
 
-	// collectionFlavor.DefMethod(":indexes", "", collectionIndexesCaller{})
-	// flavors.FlosFun("mongo-collection-indexes", ":indexes", collectionIndexesCaller{}.Docs(), &Pkg)
+	collectionFlavor.DefMethod(":indexes", "", collectionIndexesCaller{})
+	flavors.FlosFun("mongo-collection-indexes", ":indexes", collectionIndexesCaller{}.Docs(), &Pkg)
 
 	collectionFlavor.DefMethod(":insert-many", "", collectionInsertManyCaller{})
 	flavors.FlosFun("mongo-collection-insert-many", ":insert-many", collectionInsertManyCaller{}.Docs(), &Pkg)

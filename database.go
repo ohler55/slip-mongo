@@ -11,8 +11,7 @@ var (
 	databaseFlavor *flavors.Flavor
 )
 
-func init() {
-	Pkg.Initialize(nil)
+func initDatabase() {
 	databaseFlavor = flavors.DefFlavor("mongo-database",
 		map[string]slip.Object{
 			"client": nil,

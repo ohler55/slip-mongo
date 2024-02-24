@@ -11,8 +11,7 @@ var (
 	collectionFlavor *flavors.Flavor
 )
 
-func init() {
-	Pkg.Initialize(nil)
+func initCollection() {
 	collectionFlavor = flavors.DefFlavor("mongo-collection",
 		map[string]slip.Object{
 			"client":   nil,

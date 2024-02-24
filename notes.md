@@ -1,6 +1,11 @@
 
 - next
 
+ - defun and others in a package
+  - use-package make other not available
+ - maybe allow package cross use/import
+ - better, how can it be done in sbcl?
+
  - flavors
   - mongo-collection
    + :aggregate
@@ -39,7 +44,6 @@
   - load lisp code
   - test driver
   - various actors
-  - fix packages when defflavor and flosfun
 ----------
  - watch branch
   - collection :watch

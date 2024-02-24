@@ -1,14 +1,9 @@
 
 - next
 
- - :aggregate (function pipeline &key allow-disk-use batch-size)
- - :find-one-and-delete (filter &key projection sort)
- - :find-one-and-replace (filter replacement &key projection sort before)
- - :find-one-and-update (filter update &key projection sort before)
-
  - flavors
   - mongo-collection
-   - :aggregate
+   + :aggregate
    x :bulk-write ;; maybe don't implement yet
    x :clone ;; don't implement
    + :count-documents
@@ -20,9 +15,9 @@
    + :estimated-document-count
    + :find
    + :find-one
-   - :find-one-and-delete
-   - :find-one-and-replace
-   - :find-one-and-update
+   + :find-one-and-delete
+   + :find-one-and-replace
+   + :find-one-and-update
    - :indexes ;; return mongo-indexes instance
    + :insert-many
    + :insert-one
@@ -44,7 +39,7 @@
   - load lisp code
   - test driver
   - various actors
-
+  - fix packages when defflavor and flosfun
 ----------
  - watch branch
   - collection :watch

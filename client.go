@@ -12,6 +12,7 @@ var (
 )
 
 func init() {
+	Pkg.Initialize(nil)
 	clientFlavor = flavors.DefFlavor("mongo-client",
 		map[string]slip.Object{}, // instance variables
 		[]string{},               // inherited flavors
@@ -22,21 +23,22 @@ func init() {
 `),
 			},
 		},
+		&Pkg,
 	)
 	clientFlavor.GoMakeOnly = true
 
 	clientFlavor.DefMethod(":ping", "", clientPingCaller{})
-	flavors.FlosFun("mongo-ping", ":ping", clientPingCaller{}.Docs())
+	flavors.FlosFun("mongo-ping", ":ping", clientPingCaller{}.Docs(), &Pkg)
 
 	clientFlavor.DefMethod(":disconnect", "", clientDisconnectCaller{})
-	flavors.FlosFun("mongo-disconnect", ":disconnect", clientDisconnectCaller{}.Docs())
+	flavors.FlosFun("mongo-disconnect", ":disconnect", clientDisconnectCaller{}.Docs(), &Pkg)
 
 	clientFlavor.DefMethod(":database", "", clientDatabaseCaller{})
-	flavors.FlosFun("mongo-database", ":database", clientDatabaseCaller{}.Docs())
+	flavors.FlosFun("mongo-database", ":database", clientDatabaseCaller{}.Docs(), &Pkg)
 
 	clientFlavor.DefMethod(":databases", "", clientDatabasesCaller{})
-	flavors.FlosFun("mongo-databases", ":databases", clientDatabasesCaller{}.Docs())
+	flavors.FlosFun("mongo-databases", ":databases", clientDatabasesCaller{}.Docs(), &Pkg)
 
 	// clientFlavor.DefMethod(":watch", "", clientWatchCaller{})
-	// flavors.FlosFun("mongo-watch", ":watch", clientWatchCaller{}.Docs())
+	// flavors.FlosFun("mongo-watch", ":watch", clientWatchCaller{}.Docs(), &Pkg)
 }

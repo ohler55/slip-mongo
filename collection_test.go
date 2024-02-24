@@ -18,6 +18,7 @@ func TestCollectionDocs(t *testing.T) {
 	scope.Let(slip.Symbol("out"), &slip.OutputStream{Writer: &out})
 
 	for _, method := range []string{
+		":aggregate",
 		":count-documents",
 		":delete-many",
 		":delete-one",
@@ -26,6 +27,9 @@ func TestCollectionDocs(t *testing.T) {
 		":estimated-document-count",
 		":find",
 		":find-one",
+		":find-one-and-delete",
+		":find-one-and-replace",
+		":find-one-and-update",
 		":insert-many",
 		":insert-one",
 		":name",

@@ -17,12 +17,7 @@ func (caller databaseCollectionsCaller) Call(s *slip.Scope, args slip.List, dept
 	self := s.Get("self").(*flavors.Instance)
 	db := self.Any.(*mongo.Database)
 
-	timeout := defaultTimeout
-	client := self.Get("client").(*flavors.Instance)
-	if tp := client.Any.(*mongo.Client).Timeout(); tp != nil {
-		timeout = *tp
-	}
-	ctx, cf := context.WithTimeout(context.Background(), timeout)
+	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
 	defer cf()
 
 	var filter any

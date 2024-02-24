@@ -111,6 +111,15 @@ func TestDatabaseDrop(t *testing.T) {
                   (send (send mc :database "quux") :drop))`,
 		Expect: "nil",
 	}).Test(t)
+}
+
+func TestDatabaseDropError(t *testing.T) {
+	scope := slip.NewScope()
+	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
+	scope.Let(slip.Symbol("mc"), nil)
+	defer func() {
+		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+	}()
 	(&sliptest.Function{
 		Scope: scope,
 		Source: `(progn

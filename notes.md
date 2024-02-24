@@ -2,23 +2,75 @@
 - next
 
  - flavors
-  - mongo-client
-   + mongo-connect (url &key user password timeout)
-   + :database (name)
-   + :disconnect
-   + :databases (filter)
-   + :ping
-   - :watch
---------- database branch
-  - mongo-database
-   - :aggregate
-   + :client
-   - :collection (name)
-   - :create-view
-   - :drop
-   - :collections (filter) ;; collection specifications
+  - mongo-collection
+   + :aggregate
+   x :bulk-write ;; maybe don't implement yet
+   x :clone ;; don't implement
+   + :count-documents
+   + :database
+   + :delete-many
+   + :delete-one
+   + :distinct
+   + :drop
+   + :estimated-document-count
+   + :find
+   + :find-one
+   + :find-one-and-delete
+   + :find-one-and-replace
+   + :find-one-and-update
+   - :indexes ;; return mongo-indexes instance
+   + :insert-many
+   + :insert-one
    + :name
+   + :replace-one
+   - :search-indexes
+   + :update-by-id
+   + :update-many
+   + :update-one
    - :watch
+
+----------
+ - indexes branch
+  - collection :indexes
+  - mongo-indexes flavor
+
+----------
+ - actor branch
+  - load lisp code
+  - test driver
+  - various actors
+  - fix packages when defflavor and flosfun
+----------
+ - watch branch
+  - collection :watch
+  - mongo-change-stream flavor
+
+----------
+ - search-indexes branch
+  - collection :search-indexes
+  - mongo-search-indexes flavor
+
+----------
+ - database :create-view
+ - how to make read only, maybe just a view?
+
+-----------------------------------------------
+
+  - mongo-indexes
+   - :create
+    - create one, don't bother with create many
+   - :drop
+    - if with name then drop one else drop all
+   - :list
+
+  - mongo-search-indexes
+   - :create
+    - create one, don't bother with create many
+   - :drop
+    - if with name then drop one else drop all
+   - :list
+   - :update
+
   - mongo-change-stream
    - :close
    - :decode
@@ -28,31 +80,20 @@
    - :set-batch-size
    - :resume-token
    - :try-next
-  - mongo-collection
-   - :aggregate
-   - :bulk-write ;; maybe don't implement yet
-   - :clone
-   - :count-documents
-   - :database
-   - :delete-many
-   - :delete-one
-   - :distinct
-   - :drop
-   - :estimated-document-count
-   - :find
-   - :find-one
-   - :find-one-and-delete
-   - :find-one-and-replace
-   - :find-one-and-update
-   - :indexes
-   - :insert-many
-   - :name
-   - :replace-one
-   - :search-indexes
-   - :update-by-id
-   - :update-many
-   - :update-one
-   - :watch
+
+ - actors
+  - lisp code
+   - set slip.CurrentPackage then compile (defer to set back)
+   - separate lisp file for each
+   - maybe a test driver for actors (copied from one repo to the next)
+    - use slip test package
+   - use fs to load
+  - mongo-find-one-actor
+  - mongo-find-actor
+  - mongo-insert-actor
+  - mongo-update-actor
+  - mongo-actor
+   - method, filter, keys
 
  - future sessions managed by clients
   - used for transactions

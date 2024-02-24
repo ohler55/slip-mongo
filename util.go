@@ -3,10 +3,13 @@
 package main
 
 import (
+	"time"
+
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/bag"
 	"github.com/ohler55/slip/pkg/flavors"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func filterFromArg(arg slip.Object) (filter any) {
@@ -45,4 +48,13 @@ func filterFromArg(arg slip.Object) (filter any) {
 		slip.PanicType("filter", ta, "gi:bag", "list", "nil")
 	}
 	return
+}
+
+func instTimeout(inst *flavors.Instance) time.Duration {
+	timeout := defaultTimeout
+	client := inst.Get("client").(*flavors.Instance)
+	if tp := client.Any.(*mongo.Client).Timeout(); tp != nil {
+		timeout = *tp
+	}
+	return timeout
 }

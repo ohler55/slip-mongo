@@ -17,6 +17,7 @@ var (
 )
 
 func init() {
+	Pkg.Initialize(nil)
 	slip.AddPackage(&Pkg)
 	slip.UserPkg.Use(&Pkg)
 }

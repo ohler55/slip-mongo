@@ -10,24 +10,24 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type databaseDropCaller struct{}
+type collectionDropCaller struct{}
 
-func (caller databaseDropCaller) Call(s *slip.Scope, args slip.List, _ int) slip.Object {
+func (caller collectionDropCaller) Call(s *slip.Scope, args slip.List, _ int) slip.Object {
 	self := s.Get("self").(*flavors.Instance)
 
 	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
 	defer cf()
 
-	if err := self.Any.(*mongo.Database).Drop(ctx); err != nil {
+	if err := self.Any.(*mongo.Collection).Drop(ctx); err != nil {
 		panic(err)
 	}
 	return nil
 }
 
-func (caller databaseDropCaller) Docs() string {
+func (caller collectionDropCaller) Docs() string {
 	return `__:drop__
 
 
-Drops the database.
+Drops the collection.
 `
 }

@@ -31,15 +31,30 @@
 
 ----------
  - actor branch
-  - load lisp code
   - test driver
    - use slip test package
+  - defun to get string from value which is string or func
+   - need to eval in order or at least have a primary/base
+   - (cond string or typep x function or lambda)
+    - maybe implement functionp
   - various actors
-   - mongo-find-actor
-   - mongo-insert-actor
-   - mongo-update-actor
-   - mongo-replace-actor
+   - mongo-find-actor (mongo-actor)
+    - filter
+   - mongo-insert-actor (mongo-actor)
+    - func or path to get data to save from box
+    - path to put returned id
+   - mongo-update-actor (mongo-find-actor)
+    - update
+    - path to put returned count or nil to ignore
+   - mongo-replace-actor (mongo-find-actor)
+    - replacement func or path
+    - path to put returned count or nil to ignore
    - mongo-actor - abstract
+    - mongo url string or func
+    - database string or func
+    - collection string or func
+    - timeout fixnum
+    - wrap boolean
 
 ----------
  - watch branch

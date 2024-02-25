@@ -30,6 +30,7 @@ func TestCollectionDocs(t *testing.T) {
 		":find-one-and-delete",
 		":find-one-and-replace",
 		":find-one-and-update",
+		":indexes",
 		":insert-many",
 		":insert-one",
 		":name",

@@ -11,8 +11,7 @@ var (
 	collectionFlavor *flavors.Flavor
 )
 
-func init() {
-	Pkg.Initialize(nil)
+func initCollection() {
 	collectionFlavor = flavors.DefFlavor("mongo-collection",
 		map[string]slip.Object{
 			"client":   nil,
@@ -88,8 +87,8 @@ func init() {
 		collectionFindOneAndUpdateCaller{}.Docs(),
 		&Pkg)
 
-	// collectionFlavor.DefMethod(":indexes", "", collectionIndexesCaller{})
-	// flavors.FlosFun("mongo-collection-indexes", ":indexes", collectionIndexesCaller{}.Docs(), &Pkg)
+	collectionFlavor.DefMethod(":indexes", "", collectionIndexesCaller{})
+	flavors.FlosFun("mongo-collection-indexes", ":indexes", collectionIndexesCaller{}.Docs(), &Pkg)
 
 	collectionFlavor.DefMethod(":insert-many", "", collectionInsertManyCaller{})
 	flavors.FlosFun("mongo-collection-insert-many", ":insert-many", collectionInsertManyCaller{}.Docs(), &Pkg)

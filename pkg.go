@@ -4,6 +4,9 @@ package main
 
 import (
 	"github.com/ohler55/slip"
+	"github.com/ohler55/slip/pkg/bag"
+	"github.com/ohler55/slip/pkg/flavors"
+	"github.com/ohler55/slip/pkg/gi"
 )
 
 var (
@@ -19,5 +22,18 @@ var (
 func init() {
 	Pkg.Initialize(nil)
 	slip.AddPackage(&Pkg)
+	initIndexes()
+	initCollection()
+	initDatabase()
+	initClient()
+	initConnect()
+	// Loading the LISP file requires functions in several packages so have
+	// this package use the necessary ones.
+	Pkg.Use(&slip.CLPkg)
+	Pkg.Use(&gi.Pkg)
+	Pkg.Use(&bag.Pkg)
+	Pkg.Use(&flavors.Pkg)
+	loadLisp()
+	// Add to user package after finishing loading the LISP files.
 	slip.UserPkg.Use(&Pkg)
 }

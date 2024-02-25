@@ -11,8 +11,7 @@ var (
 	clientFlavor *flavors.Flavor
 )
 
-func init() {
-	Pkg.Initialize(nil)
+func initClient() {
 	clientFlavor = flavors.DefFlavor("mongo-client",
 		map[string]slip.Object{}, // instance variables
 		[]string{},               // inherited flavors

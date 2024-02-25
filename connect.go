@@ -14,7 +14,7 @@ import (
 
 const defaultTimeout = time.Second * 20
 
-func init() {
+func initConnect() {
 	slip.Define(
 		func(args slip.List) slip.Object {
 			f := Connect{Function: slip.Function{Name: "mongo-connect", Args: args}}

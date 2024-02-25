@@ -39,9 +39,6 @@ func (caller indexesListCaller) Call(s *slip.Scope, args slip.List, _ int) slip.
 		if spec.Sparse != nil && *spec.Sparse {
 			a = append(a, slip.List{slip.String("sparse"), slip.Tail{Value: slip.True}})
 		}
-		if spec.Clustered != nil && *spec.Clustered {
-			a = append(a, slip.List{slip.String("clustered"), slip.Tail{Value: slip.True}})
-		}
 		if spec.ExpireAfterSeconds != nil {
 			a = append(a,
 				slip.List{slip.String("expire-after"), slip.Tail{Value: slip.Fixnum(*spec.ExpireAfterSeconds)}})
@@ -57,7 +54,7 @@ func (caller indexesListCaller) Docs() string {
 
 Returns a list of the indexes. Each element of the list is an association list
 of the index name followed by a _cons_ for all other non-nil attributes of
-keys, version, expiration time, a flag indicating sparseness, a flag
-indicating uniqueness, and finally a flag indicating clustered or not.
+keys, version, expiration time, a flag indicating sparseness, and a flag
+indicating uniqueness.
 `
 }

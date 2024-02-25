@@ -18,32 +18,29 @@
    + :find-one-and-delete
    + :find-one-and-replace
    + :find-one-and-update
-   - :indexes ;; return mongo-indexes instance
+   + :indexes
    + :insert-many
    + :insert-one
    + :name
    + :replace-one
-   - :search-indexes
+   - :search-indexes ;;
    + :update-by-id
    + :update-many
    + :update-one
-   - :watch
-
-----------
- - indexes branch
-  - collection :indexes
-  - mongo-indexes
-   - :create (keys &key background expire-after name sparse unique language)
-    - keys is an assoc (key . 1)
-   - :drop (&optional name)
-    - if with name then drop one else drop all
-   - :list
+   - :watch ;;
 
 ----------
  - actor branch
   - load lisp code
   - test driver
+   - use slip test package
   - various actors
+   - mongo-find-actor
+   - mongo-insert-actor
+   - mongo-update-actor
+   - mongo-replace-actor
+   - mongo-actor - abstract
+
 ----------
  - watch branch
   - collection :watch
@@ -78,19 +75,6 @@
    - :resume-token
    - :try-next
 
- - actors
-  - lisp code
-   - set slip.CurrentPackage then compile (defer to set back)
-   - separate lisp file for each
-   - maybe a test driver for actors (copied from one repo to the next)
-    - use slip test package
-   - use fs to load
-  - mongo-find-one-actor
-  - mongo-find-actor
-  - mongo-insert-actor
-  - mongo-update-actor
-  - mongo-actor
-   - method, filter, keys
 
  - future sessions managed by clients
   - used for transactions

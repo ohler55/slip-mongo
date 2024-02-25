@@ -18,6 +18,8 @@ func TestIndexesDocs(t *testing.T) {
 	scope.Let(slip.Symbol("out"), &slip.OutputStream{Writer: &out})
 
 	for _, method := range []string{
+		":create",
+		":drop",
 		":list",
 	} {
 		_ = slip.ReadString(fmt.Sprintf(`(describe-method mongo-indexes %s out)`, method)).Eval(scope, nil)

@@ -30,9 +30,23 @@
    - :watch ;;
 
 ----------
+
  - actor branch
   - test driver
+   - maybe assume slip is next to repo and call go run ../slip/cmd/slip/main.go -e "xxx" test-files.lisp
+    - run from lisp/test dir maybe or just test?
+     - that allows for another main_test.go to run the whole thing
+    - test the rest is lisp
+    - check exit status
+   - suites for each actor
+    - perform with various combinations
+
    - use slip test package
+   - need mongo running
+   - create box like instance from json (just a bad maybe?)
+   - send perform and check result
+   - also start? is task need on any of these?
+
   - defun to get string from value which is string or func
    - need to eval in order or at least have a primary/base
    - (cond string or typep x function or lambda)

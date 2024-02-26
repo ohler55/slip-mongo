@@ -3,9 +3,10 @@
 
 (defvar mongo-suite (make-instance 'suite-flavor :name "mongo"))
 
-;; TBD replace with suite for each actor and a test for each variation of the actor :perform methods
-(defvar sweet (make-instance 'suite-flavor :name "sweet" :parent mongo-suite))
-(defvar toot (make-instance 'test-flavor :name "toot" :parent sweet :forms '((+ 1 (/ 2 3)))))
+(load "../slip-mongo/test/find-actor.lisp")
+(load "../slip-mongo/test/insert-actor.lisp")
+(load "../slip-mongo/test/update-actor.lisp")
+(load "../slip-mongo/test/replace-actor.lisp")
 
 (defun run-tests ()
   ;; (format t "*** murl: ~A~%" *murl*)

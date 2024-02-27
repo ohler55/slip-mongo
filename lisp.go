@@ -5,8 +5,6 @@ package main
 import (
 	"embed"
 	"io"
-	"io/fs"
-	"strings"
 
 	"github.com/ohler55/slip"
 )
@@ -21,24 +19,22 @@ func loadLisp() {
 	}()
 	slip.CurrentPackage = &Pkg
 
-	entries, err := lispFS.ReadDir("lisp")
-	if err != nil {
-		panic(err)
-	}
 	scope := slip.NewScope()
-	for _, e := range entries {
-		if !e.IsDir() && strings.HasSuffix(e.Name(), ".lisp") {
-			var f fs.File
-			if f, err = lispFS.Open("lisp/" + e.Name()); err != nil {
-				panic(err)
-			}
-			var code []byte
-			code, err = io.ReadAll(f)
-			_ = f.Close()
-			if err != nil {
-				panic(err)
-			}
-			_ = slip.Read(code).Eval(scope, nil)
+	// Use explicit path names to assure the proper order.
+	for _, path := range []string{
+		"lisp/actor.lisp",
+		"lisp/find-actor.lisp",
+	} {
+		f, err := lispFS.Open(path)
+		if err != nil {
+			panic(err)
 		}
+		var code []byte
+		code, err = io.ReadAll(f)
+		_ = f.Close()
+		if err != nil {
+			panic(err)
+		}
+		_ = slip.Read(code).Eval(scope, nil)
 	}
 }

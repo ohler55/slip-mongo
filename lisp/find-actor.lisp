@@ -13,14 +13,17 @@
   (let ((col (send (send client :database database) :collection collection))
         (f (cond ((stringp filter) (send box :get filter t))
                  ((functionp filter) (apply filter (list box)))
-                 (t nil)))
+                 (t filter))) ;; let the :find-one fail later if it's not valid
         (proj (cond ((stringp projection) (send box :get projection t))
                     ((functionp projection) (apply projection (list box)))
-                    (t nil)))
+                    (t projection)))
         (srt (cond ((stringp sort) (send box :get sort t))
                    ((functionp sort) (apply sort (list box)))
-                   (t nil))))
+                   (t sort)))
+        (skp (cond ((stringp skip) (send box :get skip t))
+                   ((functionp skip) (apply skip (list box)))
+                   (t skip))))
 
-    (send box :set (send col :find-one f :projection proj :sort srt :wrap wrap) destination))
+    (send box :set (send col :find-one f :projection proj :sort srt :wrap wrap :skip skp) destination))
 
   (list 'ok box))

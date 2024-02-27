@@ -10,19 +10,13 @@
   "Using the filter variable call mongo-find-one to retrieve a matching record
    which is then placed in the destination of the box argument using the :set
    method on the box."
-  (let ((col (send (send client :database database) :collection collection))
-        (f (cond ((stringp filter) (send box :get filter t))
-                 ((functionp filter) (apply filter (list box)))
-                 (t filter))) ;; let the :find-one fail later if it's not valid
-        (proj (cond ((stringp projection) (send box :get projection t))
-                    ((functionp projection) (apply projection (list box)))
-                    (t projection)))
-        (srt (cond ((stringp sort) (send box :get sort t))
-                   ((functionp sort) (apply sort (list box)))
-                   (t sort)))
-        (skp (cond ((stringp skip) (send box :get skip t))
-                   ((functionp skip) (apply skip (list box)))
-                   (t skip))))
+  (let* ((cname (cond ((functionp collection) (apply collection (list box)))
+                      (t collection)))
+         (f (bag-from-arg filter box))
+         (proj (bag-from-arg projection box))
+         (srt (bag-from-arg sort box))
+         (skp (bag-from-arg skip box))
+         (col (send (send client :database database) :collection cname)))
 
     (send box :set (send col :find-one f :projection proj :sort srt :wrap wrap :skip skp) destination))
 

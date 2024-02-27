@@ -9,3 +9,8 @@
 
 (defmethod (mongo-actor :after :init) (plist)
   (setq client (mongo-connect url :timeout timeout)))
+
+(defun bag-from-arg (arg box)
+  (cond ((stringp arg) (send box :get arg t))
+        ((functionp arg) (funcall arg box))
+        (t arg)))

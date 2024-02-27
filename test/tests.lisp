@@ -1,7 +1,9 @@
 
 (require 'mongo "../slip-mongo")
 
-(defvar mongo-suite (make-instance 'suite-flavor :name "mongo"))
+(defvar mongo-suite (defsuite "mongo" nil
+                      :setup (lambda () (setq mc (mongo-connect *murl*)))
+                      :teardown nil))
 
 (load "../slip-mongo/test/find-actor.lisp")
 (load "../slip-mongo/test/insert-actor.lisp")

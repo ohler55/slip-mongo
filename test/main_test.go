@@ -111,7 +111,8 @@ func availablePort() int {
 
 func TestWithSlip(t *testing.T) {
 	cmd := exec.Command("go", "run", "cmd/slip/main.go",
-		"-e", fmt.Sprintf(`(defvar *murl* %q) (run-tests)`, mongoURL),
+		// "-t", // uncomment to trace
+		"-e", fmt.Sprintf(`(progn (setq *murl* %q) (run-tests))`, mongoURL),
 		"../slip-mongo/test/tests.lisp")
 
 	cmd.Dir = "../../slip"

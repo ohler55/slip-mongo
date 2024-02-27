@@ -25,6 +25,7 @@ func loadLisp() {
 	if err != nil {
 		panic(err)
 	}
+	scope := slip.NewScope()
 	for _, e := range entries {
 		if !e.IsDir() && strings.HasSuffix(e.Name(), ".lisp") {
 			var f fs.File
@@ -37,7 +38,7 @@ func loadLisp() {
 			if err != nil {
 				panic(err)
 			}
-			_ = slip.Compile(code)
+			_ = slip.Read(code).Eval(scope, nil)
 		}
 	}
 }

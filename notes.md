@@ -31,25 +31,6 @@
 
 ----------
 
- - actor branch
-  + mongo-actor
-  + mongo-find-actor
-  - mongo-insert-actor
-  - mongo-update-actor
-  - mongo-replace-actor
-
-  - actors
-   - mongo-insert-actor (mongo-actor)
-    - func or path to get data to save from box
-    - path to put returned id
-   - mongo-update-actor (mongo-find-actor)
-    - update
-    - path to put returned count or nil to ignore
-   - mongo-replace-actor (mongo-find-actor)
-    - replacement func or path
-    - path to put returned count or nil to ignore
-
-----------
  - watch branch
   - collection :watch
   - mongo-change-stream flavor

@@ -24,6 +24,9 @@ func loadLisp() {
 	for _, path := range []string{
 		"lisp/actor.lisp",
 		"lisp/find-actor.lisp",
+		"lisp/insert-actor.lisp",
+		"lisp/update-actor.lisp",
+		"lisp/replace-actor.lisp",
 	} {
 		f, err := lispFS.Open(path)
 		if err != nil {

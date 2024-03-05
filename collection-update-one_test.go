@@ -24,6 +24,21 @@ func TestCollectionUpdateOneBasic(t *testing.T) {
 	})
 }
 
+func TestCollectionUpdateOneBag(t *testing.T) {
+	testWithConnect(t, func(t *testing.T, scope *slip.Scope) {
+		(&sliptest.Function{
+			Scope: scope,
+			Source: `(let* ((db (send mc :database "quux"))
+                            (col (send db :collection "cool-update-bag")))
+                      (send col :insert-one '((a . 1) (b . 2)))
+                      (list
+                       (send col :update-one (make-bag "{a:1}") (make-bag "{$set:{b:3}}"))
+                       (assoc "b" (send col :find-one '((a . 1)) :native t :projection '((b . t))))))`,
+			Expect: `(1 ("b" . 3))`,
+		}).Test(t)
+	})
+}
+
 func TestCollectionUpdateOneNilFilter(t *testing.T) {
 	testWithConnect(t, func(t *testing.T, scope *slip.Scope) {
 		(&sliptest.Function{

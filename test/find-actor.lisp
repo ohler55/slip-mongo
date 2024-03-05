@@ -1,8 +1,7 @@
 
-(let ((suite (defsuite "find-actor" mongo-suite
-               :setup (lambda () (setq db (send mc :database "play-find"))))))
+(let ((suite (defsuite "find-actor" mongo-suite)))
   (deftest "static" suite
-    (let ((col (send db :collection "static"))
+    (let ((col (send (send mc :database "play-find") :collection "static"))
           (actor (make-instance 'mongo-find-actor
                                 :filter (make-bag "{a:1}")
                                 :projection (make-bag "{a:true b:true}")
@@ -21,7 +20,7 @@
       ;; (format t "*** response: ~A ~A~%" (car response) (send (cadr response) :write nil))
       (assert-match "{found: {_id: \"[0-9a-f]+\" a: 1 b: 2}}" (send (cadr response) :write nil))))
   (deftest "lookup" suite
-    (let ((col (send db :collection "lookup"))
+    (let ((col (send (send mc :database "play-find") :collection "lookup"))
           (actor (make-instance 'mongo-find-actor
                                 :filter "query"
                                 :sort "query"
@@ -42,7 +41,7 @@
        "{found: {_id: \"[0-9a-f]+\" b: 2} proj: {b: 1} query: {a: 1} table: lookup}"
        (send (cadr response) :write nil))))
   (deftest "funcall" suite
-    (let ((col (send db :collection "funcall"))
+    (let ((col (send (send mc :database "play-find") :collection "funcall"))
           (actor (make-instance 'mongo-find-actor
                                 :filter (lambda (box) (make-bag "{a:1}"))
                                 :projection (lambda (box) (make-bag "{a:true b:true}"))

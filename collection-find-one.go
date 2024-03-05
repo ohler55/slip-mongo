@@ -25,13 +25,13 @@ func (caller collectionFindOneCaller) Call(s *slip.Scope, args slip.List, depth 
 		wrap   bool
 	)
 	opts := options.FindOne()
-	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":projection")); has {
+	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":projection")); has && value != nil {
 		opts = opts.SetProjection(ToBson(value))
 	}
-	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":sort")); has {
+	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":sort")); has && value != nil {
 		opts = opts.SetSort(ToBson(value))
 	}
-	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":skip")); has {
+	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":skip")); has && value != nil {
 		if num, ok := value.(slip.Fixnum); ok {
 			opts = opts.SetSkip(int64(num))
 		} else {

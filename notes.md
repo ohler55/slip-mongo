@@ -30,18 +30,7 @@
    - :watch ;;
 
 ----------
- - actor branch
-  - load lisp code
-  - test driver
-   - use slip test package
-  - various actors
-   - mongo-find-actor
-   - mongo-insert-actor
-   - mongo-update-actor
-   - mongo-replace-actor
-   - mongo-actor - abstract
 
-----------
  - watch branch
   - collection :watch
   - mongo-change-stream flavor

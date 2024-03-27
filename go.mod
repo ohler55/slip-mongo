@@ -4,7 +4,7 @@ go 1.22
 
 require (
 	github.com/ohler55/ojg v1.21.4
-	github.com/ohler55/slip v0.8.0
+	github.com/ohler55/slip v0.9.0
 	go.mongodb.org/mongo-driver v1.14.0
 )
 

@@ -3,7 +3,7 @@ module github.com/ohler55/slip-mongo
 go 1.22
 
 require (
-	github.com/ohler55/ojg v1.21.4
+	github.com/ohler55/ojg v1.23.0
 	github.com/ohler55/slip v0.9.0
 	go.mongodb.org/mongo-driver v1.14.0
 )
@@ -18,7 +18,9 @@ require (
 	github.com/youmark/pkcs8 v0.0.0-20181117223130-1be2e3e5546d // indirect
 	golang.org/x/crypto v0.17.0 // indirect
 	golang.org/x/sync v0.7.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/sys v0.21.0 // indirect
+	golang.org/x/term v0.21.0 // indirect
+	golang.org/x/text v0.16.0 // indirect
 )
 
 replace github.com/ohler55/slip => ../slip

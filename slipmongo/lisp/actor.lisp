@@ -14,3 +14,5 @@
   (cond ((stringp arg) (send box :get arg t))
         ((functionp arg) (funcall arg box))
         (t arg)))
+
+(export 'bag-from-arg)

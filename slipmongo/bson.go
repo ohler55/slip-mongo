@@ -177,8 +177,8 @@ retry:
 		bs = tv.String()
 
 	case *flavors.Instance:
-		if tv.Flavor != bag.Flavor() {
-			panic(fmt.Sprintf("an instance of %s is not convertible to a BSON type", tv.Flavor.Name()))
+		if tv.Type != bag.Flavor() {
+			panic(fmt.Sprintf("an instance of %s is not convertible to a BSON type", tv.Type.Name()))
 		}
 		bs = ToBson(tv.Any)
 

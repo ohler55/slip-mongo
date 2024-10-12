@@ -23,7 +23,7 @@ func filterFromArg(arg slip.Object) (filter any) {
 			},
 		}
 	case *flavors.Instance:
-		if ta.Flavor != bag.Flavor() {
+		if ta.Type != bag.Flavor() {
 			slip.PanicType("filter", ta, "gi:bag", "list", "nil")
 		}
 		filter = ta.Any

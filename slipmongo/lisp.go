@@ -38,6 +38,6 @@ func loadLisp() {
 		if err != nil {
 			panic(err)
 		}
-		_ = slip.Read(code).Eval(scope, nil)
+		_ = slip.Read(code, scope).Eval(scope, nil)
 	}
 }

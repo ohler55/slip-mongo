@@ -109,9 +109,10 @@ func TestToBsonSlip(t *testing.T) {
 	tt.Equal(t, "1524157875323883675019051998750190521", slipmongo.ToBson((*slip.Bignum)(bbn)))
 	tt.Equal(t, "2.5", slipmongo.ToBson((*slip.LongFloat)(big.NewFloat(2.5))))
 
-	bg := slip.ReadString(`(make-bag "[1]")`).Eval(slip.NewScope(), nil)
+	scope := slip.NewScope()
+	bg := slip.ReadString(`(make-bag "[1]")`, scope).Eval(slip.NewScope(), nil)
 	tt.Equal(t, bson.A{int32(1)}, slipmongo.ToBson(bg))
-	bg = slip.ReadString(`(make-instance 'vanilla-flavor)`).Eval(slip.NewScope(), nil)
+	bg = slip.ReadString(`(make-instance 'vanilla-flavor)`, scope).Eval(scope, nil)
 	tt.Panic(t, func() { _ = slipmongo.ToBson(bg) })
 	tt.Equal(t, true, slipmongo.ToBson(slip.True))
 }

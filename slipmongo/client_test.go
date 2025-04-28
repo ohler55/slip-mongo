@@ -23,7 +23,7 @@ func TestClientDocs(t *testing.T) {
 		":database",
 		":databases",
 	} {
-		_ = slip.ReadString(fmt.Sprintf(`(describe-method mongo-client %s out)`, method)).Eval(scope, nil)
+		_ = slip.ReadString(fmt.Sprintf(`(describe-method mongo-client %s out)`, method), scope).Eval(scope, nil)
 		tt.Equal(t, true, strings.Contains(out.String(), method))
 		out.Reset()
 	}
@@ -34,7 +34,7 @@ func TestClientPing(t *testing.T) {
 	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
 	scope.Let(slip.Symbol("mc"), nil)
 	defer func() {
-		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+		_ = slip.ReadString(`(send mc :disconnect)`, scope).Eval(scope, nil)
 	}()
 
 	(&sliptest.Function{
@@ -49,7 +49,7 @@ func TestClientDatabase(t *testing.T) {
 	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
 	scope.Let(slip.Symbol("mc"), nil)
 	defer func() {
-		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+		_ = slip.ReadString(`(send mc :disconnect)`, scope).Eval(scope, nil)
 	}()
 
 	(&sliptest.Function{
@@ -64,7 +64,7 @@ func TestClientDatabases(t *testing.T) {
 	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
 	scope.Let(slip.Symbol("mc"), nil)
 	defer func() {
-		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+		_ = slip.ReadString(`(send mc :disconnect)`, scope).Eval(scope, nil)
 	}()
 
 	(&sliptest.Function{

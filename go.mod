@@ -2,11 +2,9 @@ module github.com/ohler55/slip-mongo
 
 go 1.24
 
-toolchain go1.24.1
-
 require (
-	github.com/ohler55/ojg v1.26.2
-	github.com/ohler55/slip v0.9.9
+	github.com/ohler55/ojg v1.26.4
+	github.com/ohler55/slip v1.0.1
 	go.mongodb.org/mongo-driver v1.14.0
 )
 

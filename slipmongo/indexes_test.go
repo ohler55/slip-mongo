@@ -22,7 +22,7 @@ func TestIndexesDocs(t *testing.T) {
 		":drop",
 		":list",
 	} {
-		_ = slip.ReadString(fmt.Sprintf(`(describe-method mongo-indexes %s out)`, method)).Eval(scope, nil)
+		_ = slip.ReadString(fmt.Sprintf(`(describe-method mongo-indexes %s out)`, method), scope).Eval(scope, nil)
 		tt.Equal(t, true, strings.Contains(out.String(), method))
 		out.Reset()
 	}

@@ -103,7 +103,7 @@ func availablePort() int {
 	if listener, err = net.ListenTCP("tcp", addr); err != nil {
 		panic(err)
 	}
-	defer listener.Close()
+	defer func() { _ = listener.Close() }()
 
 	return listener.Addr().(*net.TCPAddr).Port
 }
@@ -111,9 +111,9 @@ func availablePort() int {
 func testWithConnect(t *testing.T, fun func(t *testing.T, scope *slip.Scope)) {
 	scope := slip.NewScope()
 	scope.Let(slip.Symbol("murl"), slip.String(mongoURL))
-	scope.Let(slip.Symbol("mc"), slip.ReadString(`(mongo-connect murl :timeout 3)`).Eval(scope, nil))
+	scope.Let(slip.Symbol("mc"), slip.ReadString(`(mongo-connect murl :timeout 3)`, scope).Eval(scope, nil))
 	defer func() {
-		_ = slip.ReadString(`(send mc :disconnect)`).Eval(scope, nil)
+		_ = slip.ReadString(`(send mc :disconnect)`, scope).Eval(scope, nil)
 	}()
 	fun(t, scope)
 }

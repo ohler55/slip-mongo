@@ -24,11 +24,17 @@ func (caller databaseCollectionCaller) Call(s *slip.Scope, args slip.List, depth
 	return inst
 }
 
-func (caller databaseCollectionCaller) Docs() string {
-	return `__:collection__ _name_ => _mongo-collection_
-   _name_ [string] of the collection.
-
-
-Returns a collection in the database with the specified _name_.
-`
+func (caller databaseCollectionCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":collection",
+		Text: `Returns a collection in the database with the specified _name_.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "name",
+				Type: "string",
+				Text: "The name of a collection.",
+			},
+		},
+		Return: "mongo-collection",
+	}
 }

@@ -28,12 +28,22 @@ func (caller collectionUpdateByIDCaller) Call(s *slip.Scope, args slip.List, _ i
 	return
 }
 
-func (caller collectionUpdateByIDCaller) Docs() string {
-	return `__:update-by-id__ _id_ _update_ => _fixnum_
-   _id_ [object] the id of the document. (hint: if an ObjectId wrap with {$toObjectId: <id>}.
-   _update_ [bag|list] the modification directives to apply a record.
-
-
-Update the document with a match _id_. The number of records modified is returned.
-`
+func (caller collectionUpdateByIDCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":update-by-id",
+		Text: `Update the document with a matching _id_. The number of records modified is returned.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "id",
+				Type: "object",
+				Text: "The id of the document. (hint: if an ObjectId wrap with {$toObjectId: <id>}.",
+			},
+			{
+				Name: "update",
+				Type: "bag|list",
+				Text: "The modification directives to apply to a record.",
+			},
+		},
+		Return: "fixnum",
+	}
 }

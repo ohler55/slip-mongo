@@ -47,13 +47,29 @@ func (caller collectionCountDocumentsCaller) Call(s *slip.Scope, args slip.List,
 	return slip.Fixnum(cnt)
 }
 
-func (caller collectionCountDocumentsCaller) Docs() string {
-	return `__:count-documents__ _filter_ &key _skip_ _limit_ => _fixnum_
-   _filter_ [bag|list] for the search.
-   _:skip_ [fixnum] matches to skip before returning a matching record.
-   _:limit_ [fixnum] maximum number of records to count.
-
-
-Returns the number of documents that match the _filter_ limited or adjusted by _skip_ and _limit_ values.
-`
+func (caller collectionCountDocumentsCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":count-documents",
+		Text: `Returns the number of documents that match the _filter_ limited or adjusted
+by _skip_ and _limit_ values.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter for the search.",
+			},
+			{Name: "&key"},
+			{
+				Name: ":skip",
+				Type: "fixnum",
+				Text: "Matches to skip before returning a matching record.",
+			},
+			{
+				Name: ":limit",
+				Type: "fixnum",
+				Text: "Maximum number of records to count.",
+			},
+		},
+		Return: "fixnum",
+	}
 }

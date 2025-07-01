@@ -48,13 +48,13 @@ func (caller indexesListCaller) Call(s *slip.Scope, args slip.List, _ int) slip.
 	return list
 }
 
-func (caller indexesListCaller) Docs() string {
-	return `__:list__ => _list_
-
-
-Returns a list of the indexes. Each element of the list is an association list
+func (caller indexesListCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":list",
+		Text: `Returns a list of the indexes. Each element of the list is an association list
 of the index name followed by a _cons_ for all other non-nil attributes of
 keys, version, expiration time, a flag indicating sparseness, and a flag
-indicating uniqueness.
-`
+indicating uniqueness.`,
+		Return: "list",
+	}
 }

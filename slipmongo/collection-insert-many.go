@@ -41,16 +41,27 @@ func (caller collectionInsertManyCaller) Call(s *slip.Scope, args slip.List, _ i
 	}
 }
 
-func (caller collectionInsertManyCaller) Docs() string {
-	return `__:insert-many__ _doc_ &key _wrap_ => _object_
-   _docs_ [list] of the records to be inserted. Records can be _bags_ or _lists_.
-   _:wrap_ [boolean] if true wraps non-native record IDs such as ObjectId with an indicator of the type.
-
-
-If the elements in _docs_ are an instance of the _bag-flavor_ then the
+func (caller collectionInsertManyCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":insert-many",
+		Text: `If the elements in _docs_ are instances of the _bag-flavor_ then the
 contents of the instance is inserted. If a _list_ then the list is converted
 to mongodb bson and inserted. The ids of the inserted record are
 returned. Usually these are object id but can be what ever the caller
-specifies in the record.
-`
+specifies in the record.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "docs",
+				Type: "list",
+				Text: "List of the records to be inserted. Records can be _bags_ or _lists_.",
+			},
+			{Name: "&key"},
+			{
+				Name: ":wrap",
+				Type: "boolean",
+				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+		},
+		Return: "list",
+	}
 }

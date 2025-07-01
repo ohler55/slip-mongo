@@ -75,17 +75,44 @@ func (caller collectionFindOneCaller) Call(s *slip.Scope, args slip.List, depth 
 	return
 }
 
-func (caller collectionFindOneCaller) Docs() string {
-	return `__:find-one__ _filter_ &key _projection_ _sort_ _skip_ _native_ _wrap_ => _object_
-   _filter_ [bag|list] for the search.
-   _:projection_ [bag|list] of the results to return.
-   _:sort_ [bag|list] according to the provided map.
-   _:skip_ [fixnum] matches to skip before returning a matching record.
-   _:native_ [boolean] if true return records will be a list and not a _bag-flavor_ instance.
-   _:wrap_ [boolean] if true wrap non-native such as ObjectId with an indicator of the type.
-
-
-Executes a find on the collection and returns a matching record or nil is no
-document is found matching the provided criteria.
-`
+func (caller collectionFindOneCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":find-one",
+		Text: `Executes a find on the collection and returns a matching record or nil is no
+document is found matching the provided criteria.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter for the search.",
+			},
+			{Name: "&key"},
+			{
+				Name: ":projection",
+				Type: "bag|list",
+				Text: "Projection of the results to return.",
+			},
+			{
+				Name: ":sort",
+				Type: "bag|list",
+				Text: "Sort according to the provided map.",
+			},
+			{
+				Name: ":skip",
+				Type: "fixnum",
+				Text: "Matches to skip before returning a matching record.",
+			},
+			{
+				Name: ":native",
+				Type: "boolean",
+				Text: "If true return records will be a list and not a _bag-flavor_ instance.",
+			},
+			{
+				Name: ":wrap",
+				Type: "boolean",
+				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+		},
+		Return: "object",
+	}
 }

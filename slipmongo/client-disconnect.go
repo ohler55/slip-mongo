@@ -29,10 +29,9 @@ func (caller clientDisconnectCaller) Call(s *slip.Scope, args slip.List, _ int) 
 	return nil
 }
 
-func (caller clientDisconnectCaller) Docs() string {
-	return `__:disconnect__
-
-
-Disconnects the client from the server.
-`
+func (caller clientDisconnectCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":disconnect",
+		Text: `Disconnects the client from the server.`,
+	}
 }

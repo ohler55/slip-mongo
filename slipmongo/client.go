@@ -27,16 +27,16 @@ func initClient() {
 	clientFlavor.GoMakeOnly = true
 
 	clientFlavor.DefMethod(":ping", "", clientPingCaller{})
-	flavors.FlosFun("mongo-ping", ":ping", clientPingCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-ping", ":ping", clientPingCaller{}.FuncDocs(), &Pkg)
 
 	clientFlavor.DefMethod(":disconnect", "", clientDisconnectCaller{})
-	flavors.FlosFun("mongo-disconnect", ":disconnect", clientDisconnectCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-disconnect", ":disconnect", clientDisconnectCaller{}.FuncDocs(), &Pkg)
 
 	clientFlavor.DefMethod(":database", "", clientDatabaseCaller{})
-	flavors.FlosFun("mongo-database", ":database", clientDatabaseCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-database", ":database", clientDatabaseCaller{}.FuncDocs(), &Pkg)
 
 	clientFlavor.DefMethod(":databases", "", clientDatabasesCaller{})
-	flavors.FlosFun("mongo-databases", ":databases", clientDatabasesCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-databases", ":databases", clientDatabasesCaller{}.FuncDocs(), &Pkg)
 
 	// clientFlavor.DefMethod(":watch", "", clientWatchCaller{})
 	// flavors.FlosFun("mongo-watch", ":watch", clientWatchCaller{}.Docs(), &Pkg)

@@ -30,12 +30,18 @@ func (caller collectionDeleteOneCaller) Call(s *slip.Scope, args slip.List, dept
 	return slip.Fixnum(dr.DeletedCount)
 }
 
-func (caller collectionDeleteOneCaller) Docs() string {
-	return `__:delete-one__ _filter_ => _fixnum_
-   _filter_ [bag|list] to find the document to delete.
-
-
-Deletes the first match in the collection for the _filter_ specified and
-returns the number of documents deleted.
-`
+func (caller collectionDeleteOneCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":delete-one",
+		Text: `Deletes the first match in the collection for the _filter_ specified and
+returns the number of documents deleted.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter to find the document to delete.",
+			},
+		},
+		Return: "fixnum",
+	}
 }

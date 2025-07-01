@@ -23,11 +23,17 @@ func (caller clientDatabaseCaller) Call(s *slip.Scope, args slip.List, depth int
 	return inst
 }
 
-func (caller clientDatabaseCaller) Docs() string {
-	return `__:database__ _name_ => _mongo-database_
-   _name_ [string] of the database.
-
-
-Database returns the named database on the server.
-`
+func (caller clientDatabaseCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":database",
+		Text: "Database returns the named database on the server.",
+		Args: []*slip.DocArg{
+			{
+				Name: "name",
+				Type: "string",
+				Text: "Name of the database.",
+			},
+		},
+		Return: "mongo-database",
+	}
 }

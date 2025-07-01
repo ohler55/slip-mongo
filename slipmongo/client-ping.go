@@ -29,10 +29,10 @@ func (caller clientPingCaller) Call(s *slip.Scope, args slip.List, _ int) (ok sl
 	return
 }
 
-func (caller clientPingCaller) Docs() string {
-	return `__:ping__ => _boolean_
-
-
-Pings the server returning _t_ on success or nil on timeout.
-`
+func (caller clientPingCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name:   ":ping",
+		Text:   `Pings the server returning _t_ on success or nil on timeout.`,
+		Return: "boolean",
+	}
 }

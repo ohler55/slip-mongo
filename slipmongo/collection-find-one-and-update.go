@@ -73,19 +73,50 @@ func (caller collectionFindOneAndUpdateCaller) Call(s *slip.Scope, args slip.Lis
 	return
 }
 
-func (caller collectionFindOneAndUpdateCaller) Docs() string {
-	return `__:find-one-and-update__ _filter_ _update_ &key _projection_ _sort_ _native_ _wrap_ => _object_
-   _filter_ [bag|list] for the search.
-   _update_ [bag|list] directives for the document.
-   _:projection_ [bag|list] of the results to return.
-   _:sort_ [bag|list] according to the provided map.
-   _:after_ [boolean] if true the updatement document is returned otherwise the original is returned.
-   _:native_ [boolean] if true return records will be a list and not a _bag-flavor_ instance.
-   _:wrap_ [boolean] if true wrap non-native such as ObjectId with an indicator of the type.
-
-
-Executes a find on the collection and and updates one matching
+func (caller collectionFindOneAndUpdateCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":find-one-and-update",
+		Text: `Executes a find on the collection and and updates one matching
 document. Either the original (before) or the updated document is returned
-depending on the value of the _:after_ keywork argument.
-`
+depending on the value of the _:after_ keywork argument.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter for the search.",
+			},
+			{
+				Name: "update",
+				Type: "bag|list",
+				Text: "Update directives for the document..",
+			},
+			{Name: "&key"},
+			{
+				Name: ":projection",
+				Type: "bag|list",
+				Text: "Projection of the results to return.",
+			},
+			{
+				Name: ":sort",
+				Type: "bag|list",
+				Text: "Sort according to the provided map.",
+			},
+			{
+				Name: ":after",
+				Type: "boolean",
+				Text: "If true the updated document is returned otherwise the original is returned.",
+			},
+			{
+				Name: ":native",
+				Type: "boolean",
+				Text: "If true return records will be a list and not a _bag-flavor_ instance.",
+			},
+			{
+				Name: ":wrap",
+				Type: "boolean",
+				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+		},
+		Return: "object",
+	}
 }

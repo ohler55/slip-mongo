@@ -33,14 +33,24 @@ func (caller collectionUpdateOneCaller) Call(s *slip.Scope, args slip.List, _ in
 	return
 }
 
-func (caller collectionUpdateOneCaller) Docs() string {
-	return `__:update-one__ _filter_ _update_ => _fixnum_
-   _filter_ [bag|list] that selects the records to be updated.
-   _update_ [bag|list] the modification directives to apply a record.
-
-
-If _filter_ is an instance of the _bag-flavor_ then the contents of the
+func (caller collectionUpdateOneCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":update-one",
+		Text: `If _filter_ is an instance of the _bag-flavor_ then the contents of the
 instance is the filter. If a _list_ then the list is converted to mongodb bson
-and used as the filter. The number of records modified is returned.
-`
+and used as the filter. The number of records modified is returned.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "The filter that selects the record to be updateed.",
+			},
+			{
+				Name: "update",
+				Type: "bag|list",
+				Text: "The modification directives to apply to a record.",
+			},
+		},
+		Return: "fixnum",
+	}
 }

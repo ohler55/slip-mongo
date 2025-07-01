@@ -35,13 +35,23 @@ func (caller collectionDistinctCaller) Call(s *slip.Scope, args slip.List, depth
 	return list
 }
 
-func (caller collectionDistinctCaller) Docs() string {
-	return `__:distinct__ _field_ _filter_ => _list_
-   _field_ [string|symbol] name to find distinct values of.
-   _filter_ [bag|list] for the search.
-
-
-Executes a distinct on the collection for the _field_ and _filter_ specified and returns a list
-of all the distinct values of the _field_ in the matching records.
-`
+func (caller collectionDistinctCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":distinct",
+		Text: `Executes a distinct on the collection for the _field_ and _filter_ specified
+and returns a list of all the distinct values of the _field_ in the matching records.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "field",
+				Type: "string|symbol",
+				Text: "Field name to find distinct values of.",
+			},
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter for the search.",
+			},
+		},
+		Return: "list",
+	}
 }

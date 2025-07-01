@@ -48,16 +48,43 @@ func (caller indexesCreateCaller) Call(s *slip.Scope, args slip.List, _ int) sli
 	return slip.String(name)
 }
 
-func (caller indexesCreateCaller) Docs() string {
-	return `__:create__ _keys_ &key _background_ _expire-after_ _name_ _sparse_ _unique_ _language_ => _string_
-   _keys_ [bag|list] that defines the index.
-   _:expire-after_ [fixnum] number of seconds to retain documents in the index.
-   _:name_ [string] of the index overrides the generated name.
-   _:sparse_ [boolean] if true only documents with the key fields are excluded.
-   _:unique_ [boolean] if true inserts attempted with duplicate keys are rejected.
-   _:language_ [string] specifies the default language if a text index.
-
-
-Creates an index with the provided _keys_ and various keywords. The name of the index is returned.
-`
+func (caller indexesCreateCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":create",
+		Text: `Creates an index with the provided _keys_ and various keywords. The name of the index is returned.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "keys",
+				Type: "bag|list",
+				Text: "The definition of the index.",
+			},
+			{Name: "&key"},
+			{
+				Name: ":expire-after",
+				Type: "fixnum",
+				Text: "The number of seconds to retain documents in the index.",
+			},
+			{
+				Name: ":name",
+				Type: "string",
+				Text: "Name of the index overrides the generated name.",
+			},
+			{
+				Name: ":sparse",
+				Type: "boolean",
+				Text: "If true only documents with the key fields are excluded.",
+			},
+			{
+				Name: ":unique",
+				Type: "boolean",
+				Text: "If true inserts attempted with duplicate keys are rejected.",
+			},
+			{
+				Name: ":language",
+				Type: "string",
+				Text: "Specifies the default language if a text index.",
+			},
+		},
+		Return: "string",
+	}
 }

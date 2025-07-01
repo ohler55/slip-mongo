@@ -46,13 +46,19 @@ func (caller databaseCollectionsCaller) Call(s *slip.Scope, args slip.List, dept
 	return assoc
 }
 
-func (caller databaseCollectionsCaller) Docs() string {
-	return `__:collections__ &optional _filter_ => _list_
-   _filter_ [bag|assoc|string] to be applied to the collections list. A _string_ value is taken as a regexp.
-
-
-Returns an associate list of all collections that match the _filter_. Each
+func (caller databaseCollectionsCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":collections",
+		Text: `Returns an associate list of all collections that match the _filter_. Each
 element of the returned list has a _car_ of the collection name followed by
-the type which can be either :collection or :view and then a read-only flag,
-`
+the type which can be either :collection or :view and then a read-only flag.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|assoc|string",
+				Text: "Filter to be applied to the collections list. A _string_ value is taken as a regexp.",
+			},
+		},
+		Return: "list",
+	}
 }

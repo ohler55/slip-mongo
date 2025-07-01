@@ -5,6 +5,7 @@ package slipmongo
 import (
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/bag"
+	"github.com/ohler55/slip/pkg/clos"
 	"github.com/ohler55/slip/pkg/flavors"
 	"github.com/ohler55/slip/pkg/gi"
 )
@@ -33,6 +34,7 @@ func init() {
 	Pkg.Use(&gi.Pkg)
 	Pkg.Use(&bag.Pkg)
 	Pkg.Use(&flavors.Pkg)
+	Pkg.Use(&clos.Pkg)
 	loadLisp()
 	// Add to user package after finishing loading the LISP files.
 	slip.UserPkg.Use(&Pkg)

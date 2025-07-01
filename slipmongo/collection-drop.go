@@ -24,10 +24,9 @@ func (caller collectionDropCaller) Call(s *slip.Scope, args slip.List, _ int) sl
 	return nil
 }
 
-func (caller collectionDropCaller) Docs() string {
-	return `__:drop__
-
-
-Drops the collection.
-`
+func (caller collectionDropCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":drop",
+		Text: `Drops the collection.`,
+	}
 }

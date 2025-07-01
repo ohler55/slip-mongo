@@ -20,10 +20,10 @@ func (caller collectionIndexesCaller) Call(s *slip.Scope, args slip.List, depth 
 	return inst
 }
 
-func (caller collectionIndexesCaller) Docs() string {
-	return `__:indexes__ => _instance_
-
-
-Returns an instance of the mongo-indexes flavor for the collection.
-`
+func (caller collectionIndexesCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name:   ":indexes",
+		Text:   `Returns an instance of the mongo-indexes flavor for the collection.`,
+		Return: "mongo-indexes",
+	}
 }

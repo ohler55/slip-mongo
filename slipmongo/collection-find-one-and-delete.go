@@ -68,15 +68,39 @@ func (caller collectionFindOneAndDeleteCaller) Call(s *slip.Scope, args slip.Lis
 	return
 }
 
-func (caller collectionFindOneAndDeleteCaller) Docs() string {
-	return `__:find-one-and-delete__ _filter_ &key _projection_ _sort_ _native_ _wrap_ => _object_
-   _filter_ [bag|list] for the search.
-   _:projection_ [bag|list] of the results to return.
-   _:sort_ [bag|list] according to the provided map.
-   _:native_ [boolean] if true return records will be a list and not a _bag-flavor_ instance.
-   _:wrap_ [boolean] if true wrap non-native such as ObjectId with an indicator of the type.
-
-
-Executes a find on the collection and and deletes one matching document. That document is returned.
-`
+func (caller collectionFindOneAndDeleteCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":find-one-and-delete",
+		Text: `Executes a find on the collection and and deletes one matching document.
+That document is returned.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter for the search.",
+			},
+			{Name: "&key"},
+			{
+				Name: ":projection",
+				Type: "bag|list",
+				Text: "Projection of the results to return.",
+			},
+			{
+				Name: ":sort",
+				Type: "bag|list",
+				Text: "Sort according to the provided map.",
+			},
+			{
+				Name: ":native",
+				Type: "boolean",
+				Text: "If true return records will be a list and not a _bag-flavor_ instance.",
+			},
+			{
+				Name: ":wrap",
+				Type: "boolean",
+				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+		},
+		Return: "object",
+	}
 }

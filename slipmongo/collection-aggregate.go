@@ -69,16 +69,42 @@ func (caller collectionAggregateCaller) Call(s *slip.Scope, args slip.List, dept
 	return nil
 }
 
-func (caller collectionAggregateCaller) Docs() string {
-	return `__:aggregate__ _function_ _pipeline_ &key _native_ _wrap_ _allow-disk-use_ _batch_
-   _function_ [function] to call with each record found.
-   _pipeline_ [bag|list] to execute.
-   _:native_ [boolean] if true return records will be a list and not a _bag-flavor_ instance.
-   _:wrap_ [boolean] if true wrap non-native such as ObjectId with an indicator of the type.
-   _:allow-disk-use_ [boolean] if true allows the use of the disk during the query.
-   _:batch_ [fixnum] size of each fetch from the server.
-
-
-Executes a aggregate pipeline on the collection and calls _function_ on each document.
-`
+func (caller collectionAggregateCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":aggregate",
+		Text: `Executes a aggregate pipeline on the collection and calls _function_ on each document.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "function",
+				Type: "function",
+				Text: "Function to call with each record found.",
+			},
+			{
+				Name: "pipeline",
+				Type: "bag|list",
+				Text: "Pipeline to execute",
+			},
+			{Name: "&key"},
+			{
+				Name: ":native",
+				Type: "boolean",
+				Text: "If true return records will be a list and not a _bag-flavor_ instance.",
+			},
+			{
+				Name: ":wrap",
+				Type: "boolean",
+				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+			{
+				Name: ":allow-disk-use",
+				Type: "boolean",
+				Text: "If true allows the use of the disk during the query.",
+			},
+			{
+				Name: ":batch",
+				Type: "fixnum",
+				Text: "Size of each fetch from the server.",
+			},
+		},
+	}
 }

@@ -24,10 +24,9 @@ func (caller databaseDropCaller) Call(s *slip.Scope, args slip.List, _ int) slip
 	return nil
 }
 
-func (caller databaseDropCaller) Docs() string {
-	return `__:drop__
-
-
-Drops the database.
-`
+func (caller databaseDropCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":drop",
+		Text: `Drops the database.`,
+	}
 }

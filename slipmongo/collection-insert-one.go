@@ -31,15 +31,26 @@ func (caller collectionInsertOneCaller) Call(s *slip.Scope, args slip.List, _ in
 	return
 }
 
-func (caller collectionInsertOneCaller) Docs() string {
-	return `__:insert-one__ _doc_ &key _wrap_ => _object_
-   _doc_ [bag|list] the data to be inserted.
-   _:wrap_ [boolean] if true wraps non-native record IDs such as ObjectId with an indicator of the type.
-
-
-If _doc_ is an instance of the _bag-flavor_ then the contents of the instance
+func (caller collectionInsertOneCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":insert-one",
+		Text: `If _doc_ is an instance of the _bag-flavor_ then the contents of the instance
 is inserted. If a _list_ then the list is converted to mongodb bson and
 inserted. The id of the inserted record is returned. Usually this is an object
-id but can be what ever the caller specifies in the record.
-`
+id but can be what ever the caller specifies in the record.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "doc",
+				Type: "bag|list",
+				Text: "The data to be inserted.",
+			},
+			{Name: "&key"},
+			{
+				Name: ":wrap",
+				Type: "boolean",
+				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+		},
+		Return: "object",
+	}
 }

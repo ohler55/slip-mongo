@@ -33,14 +33,24 @@ func (caller collectionReplaceOneCaller) Call(s *slip.Scope, args slip.List, _ i
 	return
 }
 
-func (caller collectionReplaceOneCaller) Docs() string {
-	return `__:replace-one__ _filter_ _replacement_ => _fixnum_
-   _filter_ [bag|list] that selects the records to be replaced.
-   _replacement_ [bag|list] the new document to replace the first existing match.
-
-
-If _filter_ is an instance of the _bag-flavor_ then the contents of the
+func (caller collectionReplaceOneCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":replace-one",
+		Text: `If _filter_ is an instance of the _bag-flavor_ then the contents of the
 instance is the filter. If a _list_ then the list is converted to mongodb bson
-and used as the filter. The number of records replaced is returned.
-`
+and used as the filter. The number of records replaced is returned.`,
+		Args: []*slip.DocArg{
+			{
+				Name: ":filter",
+				Type: "bag|list",
+				Text: "The filter that selects the records to be replaced.",
+			},
+			{
+				Name: "replacement",
+				Type: "bag|list",
+				Text: "The data to be inserted.",
+			},
+		},
+		Return: "fixnum",
+	}
 }

@@ -31,16 +31,16 @@ func initDatabase() {
 	flavors.FlosFun("mongo-database-client", ":client", "returns the client used to create the database instance", &Pkg)
 
 	databaseFlavor.DefMethod(":name", "", databaseNameCaller{})
-	flavors.FlosFun("mongo-database-name", ":name", databaseNameCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-database-name", ":name", databaseNameCaller{}.FuncDocs(), &Pkg)
 
 	databaseFlavor.DefMethod(":drop", "", databaseDropCaller{})
-	flavors.FlosFun("mongo-database-drop", ":drop", databaseDropCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-database-drop", ":drop", databaseDropCaller{}.FuncDocs(), &Pkg)
 
 	databaseFlavor.DefMethod(":collection", "", databaseCollectionCaller{})
-	flavors.FlosFun("mongo-database-collection", ":collection", databaseCollectionCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-database-collection", ":collection", databaseCollectionCaller{}.FuncDocs(), &Pkg)
 
 	databaseFlavor.DefMethod(":collections", "", databaseCollectionsCaller{})
-	flavors.FlosFun("mongo-database-collections", ":collections", databaseCollectionsCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-database-collections", ":collections", databaseCollectionsCaller{}.FuncDocs(), &Pkg)
 
 	// databaseFlavor.DefMethod(":create-view", "", databaseCreateViewCaller{})
 	// flavors.FlosFun("mongo-database-create-view", ":create-view", databaseCreateViewCaller{}.Docs(), &Pkg)

@@ -17,10 +17,10 @@ func (caller databaseNameCaller) Call(s *slip.Scope, args slip.List, _ int) slip
 	return slip.String(db.Name())
 }
 
-func (caller databaseNameCaller) Docs() string {
-	return `__:name__ => _string_
-
-
-Returns the name of the database.
-`
+func (caller databaseNameCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name:   ":name",
+		Text:   `Returns the name of the database.`,
+		Return: "string",
+	}
 }

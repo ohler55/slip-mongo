@@ -95,21 +95,62 @@ func (caller collectionFindCaller) Call(s *slip.Scope, args slip.List, depth int
 	return nil
 }
 
-func (caller collectionFindCaller) Docs() string {
-	return `__:find__ _function_ _filter_
-&key _projection_ _sort_ _skip_ _native_ _wrap_ _limit_ _allow-disk-use_ _batch_
-   _function_ [function] to call with each record found.
-   _filter_ [bag|list] for the search.
-   _:projection_ [bag|list] of the results to return.
-   _:sort_ [bag|list] according to the provided map.
-   _:skip_ [fixnum] matches to skip before returning a matching record.
-   _:native_ [boolean] if true return records will be a list and not a _bag-flavor_ instance.
-   _:wrap_ [boolean] if true wrap non-native such as ObjectId with an indicator of the type.
-   _:limit_ [fixnum] of the number of records to find.
-   _:allow-disk-use_ [boolean] if true allows the use of the disk during the query.
-   _:batch_ [fixnum] size of each fetch from the server.
-
-
-Executes a find on the collection and calls _function_ on each matching record.
-`
+func (caller collectionFindCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":find",
+		Text: `Executes a find on the collection and calls _function_ on each matching record.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "function",
+				Type: "function",
+				Text: "Function to call with each record found.",
+			},
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter for the search.",
+			},
+			{Name: "&key"},
+			{
+				Name: ":projection",
+				Type: "bag|list",
+				Text: "Projection of the results to return.",
+			},
+			{
+				Name: ":sort",
+				Type: "bag|list",
+				Text: "Sort according to the provided map.",
+			},
+			{
+				Name: ":skip",
+				Type: "fixnum",
+				Text: "Matches to skip before returning a matching record.",
+			},
+			{
+				Name: ":native",
+				Type: "boolean",
+				Text: "If true return records will be a list and not a _bag-flavor_ instance.",
+			},
+			{
+				Name: ":wrap",
+				Type: "boolean",
+				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+			{
+				Name: ":limit",
+				Type: "fixnum",
+				Text: "Limit of the number of records to find.",
+			},
+			{
+				Name: ":allow-disk-use",
+				Type: "boolean",
+				Text: "If true allows the use of the disk during the query.",
+			},
+			{
+				Name: ":batch",
+				Type: "fixnum",
+				Text: "Size of each fetch from the server.",
+			},
+		},
+	}
 }

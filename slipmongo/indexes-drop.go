@@ -34,12 +34,18 @@ func (caller indexesDropCaller) Call(s *slip.Scope, args slip.List, _ int) slip.
 	return nil
 }
 
-func (caller indexesDropCaller) Docs() string {
-	return `__:drop__ &optional _name_
-   _name_ [string] name of the index to drop.
-
-
-Drops the index with the provided _name_ if one is provided. If no _name_ is
-provided then all indexes are dropped.
-`
+func (caller indexesDropCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":drop",
+		Text: `Drops the index with the provided _name_ if one is provided. If no _name_ is
+provided then all indexes are dropped.`,
+		Args: []*slip.DocArg{
+			{Name: "&optional"},
+			{
+				Name: "name",
+				Type: "string",
+				Text: "Name of the index to drop.",
+			},
+		},
+	}
 }

@@ -17,10 +17,10 @@ func (caller collectionNameCaller) Call(s *slip.Scope, args slip.List, _ int) sl
 	return slip.String(table.Name())
 }
 
-func (caller collectionNameCaller) Docs() string {
-	return `__:name__ => _string_
-
-
-Returns the name of the collection.
-`
+func (caller collectionNameCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name:   ":name",
+		Text:   `Returns the name of the collection.`,
+		Return: "string",
+	}
 }

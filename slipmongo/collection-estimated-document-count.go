@@ -25,10 +25,10 @@ func (caller collectionEstimatedDocumentCountCaller) Call(s *slip.Scope, args sl
 	return slip.Fixnum(cnt)
 }
 
-func (caller collectionEstimatedDocumentCountCaller) Docs() string {
-	return `__:estimated-document-count__ => _fixnum_
-
-
-Returns the estimated number of documents in the collection.
-`
+func (caller collectionEstimatedDocumentCountCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name:   ":estimated-document-count",
+		Text:   `Returns the estimated number of documents in the collection.`,
+		Return: "fixnum",
+	}
 }

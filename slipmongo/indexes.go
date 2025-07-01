@@ -28,11 +28,11 @@ and remove indexes on a collection.
 	indexesFlavor.GoMakeOnly = true
 
 	indexesFlavor.DefMethod(":create", "", indexesCreateCaller{})
-	flavors.FlosFun("mongo-indexes-create", ":create", indexesCreateCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-indexes-create", ":create", indexesCreateCaller{}.FuncDocs(), &Pkg)
 
 	indexesFlavor.DefMethod(":drop", "", indexesDropCaller{})
-	flavors.FlosFun("mongo-indexes-drop", ":drop", indexesDropCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-indexes-drop", ":drop", indexesDropCaller{}.FuncDocs(), &Pkg)
 
 	indexesFlavor.DefMethod(":list", "", indexesListCaller{})
-	flavors.FlosFun("mongo-indexes-list", ":list", indexesListCaller{}.Docs(), &Pkg)
+	flavors.FlosFun("mongo-indexes-list", ":list", indexesListCaller{}.FuncDocs(), &Pkg)
 }

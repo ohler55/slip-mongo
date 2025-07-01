@@ -42,13 +42,20 @@ func (caller clientDatabasesCaller) Call(s *slip.Scope, args slip.List, depth in
 	return assoc
 }
 
-func (caller clientDatabasesCaller) Docs() string {
-	return `__:databases__ &optional _filter_ => _list_
-   _filter_ [bag|assoc|string] to be applied to the databases list. A _string_ value is taken as a regexp.
-
-
-Returns an associate list of all databases that match the _filter_. Each
+func (caller clientDatabasesCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":databases",
+		Text: `Returns an associate list of all databases that match the _filter_. Each
 element of the returned list has a _car_ of the database name followed by size
-of the database on disk.
-`
+of the database on disk.`,
+		Args: []*slip.DocArg{
+			{Name: "&optional"},
+			{
+				Name: "filter",
+				Type: "bag|assoc|string",
+				Text: "Filter to be applied to the databases list. A _string_ value is taken as a regexp.",
+			},
+		},
+		Return: "list",
+	}
 }

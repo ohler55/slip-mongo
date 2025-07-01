@@ -30,12 +30,18 @@ func (caller collectionDeleteManyCaller) Call(s *slip.Scope, args slip.List, dep
 	return slip.Fixnum(dr.DeletedCount)
 }
 
-func (caller collectionDeleteManyCaller) Docs() string {
-	return `__:delete-many__ _filter_ => _fixnum_
-   _filter_ [bag|list] to find the document to delete.
-
-
-Deletes the all matches in the collection for the _filter_ specified and
-returns the number of documents deleted.
-`
+func (caller collectionDeleteManyCaller) FuncDocs() *slip.FuncDoc {
+	return &slip.FuncDoc{
+		Name: ":delete-many",
+		Text: `Deletes the all matches in the collection for the _filter_ specified and
+returns the number of documents deleted.`,
+		Args: []*slip.DocArg{
+			{
+				Name: "filter",
+				Type: "bag|list",
+				Text: "Filter to find the document to delete.",
+			},
+		},
+		Return: "fixnum",
+	}
 }

@@ -7,18 +7,17 @@ import (
 	"github.com/ohler55/slip/pkg/bag"
 	"github.com/ohler55/slip/pkg/clos"
 	"github.com/ohler55/slip/pkg/flavors"
+	"github.com/ohler55/slip/pkg/generic"
 	"github.com/ohler55/slip/pkg/gi"
 )
 
-var (
-	// Pkg is the message package.
-	Pkg = slip.Package{
-		Name:      "mongo",
-		Nicknames: []string{"mongo"},
-		Doc:       "Home of symbols defined for the mongodb functions, variables, and constants.",
-		PreSet:    slip.DefaultPreSet,
-	}
-)
+// Pkg is the message package.
+var Pkg = slip.Package{
+	Name:      "mongo",
+	Nicknames: []string{"mongo"},
+	Doc:       "Home of symbols defined for the mongodb functions, variables, and constants.",
+	PreSet:    slip.DefaultPreSet,
+}
 
 func init() {
 	Pkg.Initialize(nil)
@@ -35,6 +34,7 @@ func init() {
 	Pkg.Use(&bag.Pkg)
 	Pkg.Use(&flavors.Pkg)
 	Pkg.Use(&clos.Pkg)
+	Pkg.Use(&generic.Pkg)
 	loadLisp()
 	// Add to user package after finishing loading the LISP files.
 	slip.UserPkg.Use(&Pkg)

@@ -51,7 +51,7 @@ type Connect struct {
 
 // Call the function with the arguments provided.
 func (f *Connect) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
-	slip.ArgCountCheck(f, args, 1, 3)
+	slip.CheckArgCount(s, depth, f, args, 1, 3)
 	timeout := defaultTimeout
 	opts := options.Client()
 	opts = opts.ApplyURI(string(slip.MustBeString(args[0], "url")))

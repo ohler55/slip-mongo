@@ -36,21 +36,21 @@ func (caller collectionFindCaller) Call(s *slip.Scope, args slip.List, depth int
 		if num, ok := value.(slip.Fixnum); ok {
 			opts = opts.SetSkip(int64(num))
 		} else {
-			slip.PanicType(":skip", value, "fixnum")
+			slip.TypePanic(s, depth, ":skip", value, "fixnum")
 		}
 	}
 	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":limit")); has {
 		if num, ok := value.(slip.Fixnum); ok {
 			opts = opts.SetLimit(int64(num))
 		} else {
-			slip.PanicType(":limit", value, "fixnum")
+			slip.TypePanic(s, depth, ":limit", value, "fixnum")
 		}
 	}
 	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":batch")); has {
 		if num, ok := value.(slip.Fixnum); ok {
 			opts = opts.SetBatchSize(int32(num))
 		} else {
-			slip.PanicType(":batch", value, "fixnum")
+			slip.TypePanic(s, depth, ":batch", value, "fixnum")
 		}
 	}
 	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":allow-disk-use")); has && value != nil {

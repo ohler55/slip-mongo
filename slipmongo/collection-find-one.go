@@ -35,7 +35,7 @@ func (caller collectionFindOneCaller) Call(s *slip.Scope, args slip.List, depth 
 		if num, ok := value.(slip.Fixnum); ok {
 			opts = opts.SetSkip(int64(num))
 		} else {
-			slip.PanicType(":skip", value, "fixnum")
+			slip.TypePanic(s, depth, ":skip", value, "fixnum")
 		}
 	}
 	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":native")); has && value != nil {

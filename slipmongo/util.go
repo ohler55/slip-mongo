@@ -12,7 +12,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func filterFromArg(arg slip.Object) (filter any) {
+func filterFromArg(s *slip.Scope, arg slip.Object, depth int) (filter any) {
 	switch ta := arg.(type) {
 	case nil:
 		// leave filter as nil
@@ -24,7 +24,7 @@ func filterFromArg(arg slip.Object) (filter any) {
 		}
 	case *flavors.Instance:
 		if ta.Type != bag.Flavor() {
-			slip.PanicType("filter", ta, "gi:bag", "list", "nil")
+			slip.TypePanic(s, depth, "filter", ta, "gi:bag", "list", "nil")
 		}
 		filter = ta.Any
 	case slip.List:
@@ -40,12 +40,12 @@ func filterFromArg(arg slip.Object) (filter any) {
 					Value: slip.Simplify(cdr),
 				})
 			} else {
-				slip.PanicType("filter list element", v, "cons", "list")
+				slip.TypePanic(s, depth, "filter list element", v, "cons", "list")
 			}
 		}
 		filter = d
 	default:
-		slip.PanicType("filter", ta, "gi:bag", "list", "nil")
+		slip.TypePanic(s, depth, "filter", ta, "gi:bag", "list", "nil")
 	}
 	return
 }

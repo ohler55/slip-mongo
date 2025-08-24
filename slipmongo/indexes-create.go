@@ -13,7 +13,7 @@ import (
 
 type indexesCreateCaller struct{}
 
-func (caller indexesCreateCaller) Call(s *slip.Scope, args slip.List, _ int) slip.Object {
+func (caller indexesCreateCaller) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
 	self := s.Get("self").(*flavors.Instance)
 
 	kargs := args[1:]
@@ -22,7 +22,7 @@ func (caller indexesCreateCaller) Call(s *slip.Scope, args slip.List, _ int) sli
 		if num, ok := value.(slip.Fixnum); ok {
 			opts = opts.SetExpireAfterSeconds(int32(num))
 		} else {
-			slip.PanicType(":expire-after", value, "fixnum")
+			slip.TypePanic(s, depth, ":expire-after", value, "fixnum")
 		}
 	}
 	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":name")); has {

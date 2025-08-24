@@ -26,7 +26,7 @@ func initDatabase() {
 		},
 		&Pkg,
 	)
-	databaseFlavor.GoMakeOnly = true
+	// databaseFlavor.GoMakeOnly = true
 
 	flavors.FlosFun("mongo-database-client", ":client", "returns the client used to create the database instance", &Pkg)
 

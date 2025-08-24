@@ -28,7 +28,7 @@ func (caller collectionAggregateCaller) Call(s *slip.Scope, args slip.List, dept
 		if num, ok := value.(slip.Fixnum); ok {
 			opts = opts.SetBatchSize(int32(num))
 		} else {
-			slip.PanicType(":batch", value, "fixnum")
+			slip.TypePanic(s, depth, ":batch", value, "fixnum")
 		}
 	}
 	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":allow-disk-use")); has && value != nil {

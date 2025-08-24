@@ -12,7 +12,7 @@ import (
 
 type collectionInsertManyCaller struct{}
 
-func (caller collectionInsertManyCaller) Call(s *slip.Scope, args slip.List, _ int) slip.Object {
+func (caller collectionInsertManyCaller) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
 	self := s.Get("self").(*flavors.Instance)
 
 	var wrap bool
@@ -21,7 +21,7 @@ func (caller collectionInsertManyCaller) Call(s *slip.Scope, args slip.List, _ i
 	}
 	list, ok := args[0].(slip.List)
 	if !ok {
-		slip.PanicType("docs", args[0], "list")
+		slip.TypePanic(s, depth, "docs", args[0], "list")
 	}
 	docs := make([]any, len(list))
 	for i, val := range list {

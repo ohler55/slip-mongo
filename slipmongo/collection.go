@@ -27,7 +27,7 @@ func initCollection() {
 		},
 		&Pkg,
 	)
-	collectionFlavor.GoMakeOnly = true
+	// collectionFlavor.GoMakeOnly = true
 
 	collectionFlavor.DefMethod(":aggregate", "", collectionAggregateCaller{})
 	flavors.FlosFun("mongo-collection-aggregate", ":aggregate", collectionAggregateCaller{}.FuncDocs(), &Pkg)

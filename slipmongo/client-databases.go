@@ -26,7 +26,7 @@ func (caller clientDatabasesCaller) Call(s *slip.Scope, args slip.List, depth in
 
 	var filter any
 	if 0 < len(args) {
-		filter = filterFromArg(args[0])
+		filter = filterFromArg(s, args[0], depth)
 	}
 	if filter == nil {
 		filter = bson.D{}

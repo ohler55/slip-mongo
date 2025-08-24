@@ -59,7 +59,7 @@ func (f *Connect) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
 		if num, ok := v.(slip.Fixnum); ok {
 			timeout = time.Second * time.Duration(num)
 		} else {
-			slip.PanicType(":timeout", v, "fixnum")
+			slip.TypePanic(s, depth, ":timeout", v, "fixnum")
 		}
 	}
 	opts = opts.SetTimeout(timeout)

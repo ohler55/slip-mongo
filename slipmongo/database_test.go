@@ -128,3 +128,10 @@ func TestDatabaseDropError(t *testing.T) {
 		PanicType: slip.Symbol("error"),
 	}).Test(t)
 }
+
+func TestDatabaseGoMakeOnly(t *testing.T) {
+	(&sliptest.Function{
+		Source:    `(make-instance 'mongo-database)`,
+		PanicType: slip.ErrorSymbol,
+	}).Test(t)
+}

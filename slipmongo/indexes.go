@@ -25,7 +25,7 @@ and remove indexes on a collection.
 		},
 		&Pkg,
 	)
-	// indexesFlavor.GoMakeOnly = true
+	indexesFlavor.GoMakeOnly = true
 
 	indexesFlavor.DefMethod(":create", "", indexesCreateCaller{})
 	flavors.FlosFun("mongo-indexes-create", ":create", indexesCreateCaller{}.FuncDocs(), &Pkg)

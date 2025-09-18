@@ -55,3 +55,10 @@ func TestCollectionName(t *testing.T) {
 		}).Test(t)
 	})
 }
+
+func TestCollectionGoMakeOnly(t *testing.T) {
+	(&sliptest.Function{
+		Source:    `(make-instance 'mongo-collection)`,
+		PanicType: slip.ErrorSymbol,
+	}).Test(t)
+}

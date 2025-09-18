@@ -24,7 +24,7 @@ func initClient() {
 		},
 		&Pkg,
 	)
-	// clientFlavor.GoMakeOnly = true
+	clientFlavor.GoMakeOnly = true
 
 	clientFlavor.DefMethod(":ping", "", clientPingCaller{})
 	flavors.FlosFun("mongo-ping", ":ping", clientPingCaller{}.FuncDocs(), &Pkg)

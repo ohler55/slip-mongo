@@ -42,3 +42,10 @@ func TestIndexesList(t *testing.T) {
 		}).Test(t)
 	})
 }
+
+func TestIndexesGoMakeOnly(t *testing.T) {
+	(&sliptest.Function{
+		Source:    `(make-instance 'mongo-indexes)`,
+		PanicType: slip.ErrorSymbol,
+	}).Test(t)
+}

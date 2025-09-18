@@ -165,3 +165,10 @@ func TestConnectBadTimeout(t *testing.T) {
 		PanicType: slip.Symbol("type-error"),
 	}).Test(t)
 }
+
+func TestClientGoMakeOnly(t *testing.T) {
+	(&sliptest.Function{
+		Source:    `(make-instance 'mongo-client)`,
+		PanicType: slip.ErrorSymbol,
+	}).Test(t)
+}

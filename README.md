@@ -1,6 +1,5 @@
 # slip-mongo
 
-[![Build Status](https://github.com/ohler55/slip-mongo/actions/workflows/CI.yaml/badge.svg)](https://github.com/ohler55/slip-mongo/actions/workflows/CI.yaml)
 ![](assets/coverage-badge.svg)
 
 SLIP-Mongo is a set of MongoDB APIs for SLIP.

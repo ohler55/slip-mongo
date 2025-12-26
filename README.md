@@ -1,11 +1,14 @@
 # slip-mongo
 
+[![Build Status](https://github.com/ohler55/slip-mongo/actions/workflows/CI.yaml/badge.svg)](https://github.com/ohler55/slip-mongo/actions/workflows/CI.yaml)
+![](assets/coverage-badge.svg)
+
 SLIP-Mongo is a set of MongoDB APIs for SLIP.
 
 The concepts follow those found in the driver package at
 [go.mongodb.org/mongo-driver/mongo](go.mongodb.org/mongo-driver/mongo). To
-start a connection is made to the database. Collections are then used
-to access or query the records in the database.
+start, a connection is made to a mongodb database. Collections are
+then used to access or query the records in the database.
 
 ## Notes
 
@@ -13,12 +16,7 @@ to access or query the records in the database.
 
 MongoDB is based on bson data. In this package the bson data is mapped
 to SLIP bag instances which for most purposes can be thought of as
-JSON data which does map to LISP with some minor exceptions. JSON
-objects which are represented as golang maps are converted to LISP
-association lists but the reverse can lose data if there are more than
-once association element with the same key. While an association list
-does map to a bson D type that is not supported by this package. A
-bson M type is used for bad maps and for association lists.
+JSON data.
 
 ### Controlling Data Types
 

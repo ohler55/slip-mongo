@@ -5,3 +5,5 @@
 
 *.out
 mongo-data
+
+stash.lisp

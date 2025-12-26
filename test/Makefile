@@ -2,7 +2,7 @@
 all: test
 
 test:
-	go test
+	go test -coverprofile=cov.out
 
 verbose:
 	go test -v

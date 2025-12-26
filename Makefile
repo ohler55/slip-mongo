@@ -12,7 +12,9 @@ build:
 	go build -buildmode=plugin -o mongo.so *.go
 
 test: lint build
-	go test -coverprofile=cov.out ./...
 	make -C test
+	$Q go tool cover -func=cov.out | grep "total:"
+	$(eval COVERAGE = $(shell go tool cover -func=cov.out | grep "total:" | grep -Eo "[0-9]+\.[0-9]+"))
+	sh ./assets/gen-coverage-badge.sh $(COVERAGE)
 
 .PHONY: all build

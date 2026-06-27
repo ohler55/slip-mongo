@@ -4,7 +4,7 @@ go 1.26
 
 require (
 	github.com/ohler55/ojg v1.28.1
-	github.com/ohler55/slip v1.4.1
+	github.com/ohler55/slip v1.5.0
 	go.mongodb.org/mongo-driver v1.17.9
 )
 
@@ -23,4 +23,4 @@ require (
 	golang.org/x/text v0.28.0 // indirect
 )
 
-replace github.com/ohler55/slip => ../slip
+// replace github.com/ohler55/slip => ../slip

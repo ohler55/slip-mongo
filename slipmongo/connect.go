@@ -8,8 +8,8 @@ import (
 
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/flavors"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 const defaultTimeout = time.Second * 20
@@ -63,12 +63,12 @@ func (f *Connect) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
 		}
 	}
 	opts = opts.SetTimeout(timeout)
-	ctx, cf := context.WithTimeout(context.Background(), timeout)
-	defer cf()
-	mc, err := mongo.Connect(ctx, opts)
+	mc, err := mongo.Connect(opts)
 	if err != nil {
 		panic(err)
 	}
+	ctx, cf := context.WithTimeout(context.Background(), timeout)
+	defer cf()
 	if err = mc.Ping(ctx, nil); err != nil {
 		panic(err)
 	}

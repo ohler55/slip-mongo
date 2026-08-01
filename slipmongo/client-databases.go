@@ -7,8 +7,8 @@ import (
 
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/flavors"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type clientDatabasesCaller struct{}
@@ -17,11 +17,7 @@ func (caller clientDatabasesCaller) Call(s *slip.Scope, args slip.List, depth in
 	self := s.Get("self").(*flavors.Instance)
 	mc := self.Any.(*mongo.Client)
 
-	timeout := defaultTimeout
-	if to := mc.Timeout(); to != nil {
-		timeout = *to
-	}
-	ctx, cf := context.WithTimeout(context.Background(), timeout)
+	ctx, cf := context.WithTimeout(context.Background(), defaultTimeout)
 	defer cf()
 
 	var filter any

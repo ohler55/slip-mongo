@@ -7,7 +7,7 @@ import (
 
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/flavors"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type clientPingCaller struct{}
@@ -16,11 +16,7 @@ func (caller clientPingCaller) Call(s *slip.Scope, args slip.List, _ int) (ok sl
 	self := s.Get("self").(*flavors.Instance)
 	mc := self.Any.(*mongo.Client)
 
-	timeout := defaultTimeout
-	if to := mc.Timeout(); to != nil {
-		timeout = *to
-	}
-	ctx, cf := context.WithTimeout(context.Background(), timeout)
+	ctx, cf := context.WithTimeout(context.Background(), defaultTimeout)
 	defer cf()
 
 	if mc.Ping(ctx, nil) == nil {

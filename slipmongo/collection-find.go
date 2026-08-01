@@ -9,10 +9,9 @@ import (
 	"github.com/ohler55/slip/pkg/bag"
 	"github.com/ohler55/slip/pkg/cl"
 	"github.com/ohler55/slip/pkg/flavors"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 type collectionFindCaller struct{}
@@ -67,7 +66,7 @@ func (caller collectionFindCaller) Call(s *slip.Scope, args slip.List, depth int
 
 	fun := cl.ResolveToCaller(s, args[0], depth)
 	filter := ToBson(args[1])
-	if _, ok := filter.(primitive.Null); ok || filter == nil {
+	if _, ok := filter.(bson.Null); ok || filter == nil {
 		filter = bson.D{}
 	}
 	cursor, err := self.Any.(*mongo.Collection).Find(ctx, filter, opts)

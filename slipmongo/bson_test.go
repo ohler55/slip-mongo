@@ -11,8 +11,7 @@ import (
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip-mongo/slipmongo"
 	"github.com/ohler55/slip/pkg/gi"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 func TestToBsonNonSlip(t *testing.T) {
@@ -23,10 +22,10 @@ func TestToBsonNonSlip(t *testing.T) {
 	tt.Equal(t, bson.A{int32(1), int32(2), int32(3)}, slipmongo.ToBson([]any{1, 2, 3}))
 	tt.Equal(t, bson.M{"a": int32(1)}, slipmongo.ToBson(map[string]any{"a": 1}))
 	tt.Equal(t,
-		primitive.Timestamp{T: 397716434, I: 2011714325},
+		bson.Timestamp{T: 397716434, I: 2011714325},
 		slipmongo.ToBson(map[string]any{"$timestamp": int64(1708179079_123456789)}))
 	tt.Equal(t,
-		primitive.Binary{
+		bson.Binary{
 			Subtype: bson.TypeBinaryUUID,
 			Data: []byte{
 				0x6e, 0xf1, 0x69, 0x94, 0x70, 0x1d, 0x44, 0xd5, 0x87, 0xec, 0x7e, 0xf3, 0xe2, 0xe5, 0x70, 0x9b,
@@ -34,7 +33,7 @@ func TestToBsonNonSlip(t *testing.T) {
 		},
 		slipmongo.ToBson(map[string]any{"$uuid": "6ef16994-701d-44d5-87ec-7ef3e2e5709b"}))
 	tt.Equal(t,
-		primitive.Binary{
+		bson.Binary{
 			Subtype: bson.TypeBinaryMD5,
 			Data: []byte{
 				0x6e, 0xf1, 0x69, 0x94, 0x70, 0x1d, 0x44, 0xd5, 0x87, 0xec, 0x7e, 0xf3, 0xe2, 0xe5, 0x70, 0x9b,
@@ -42,12 +41,12 @@ func TestToBsonNonSlip(t *testing.T) {
 		},
 		slipmongo.ToBson(map[string]any{"$md5": "6ef16994701d44d587ec7ef3e2e5709b"}))
 	dstr := "123456789012345678901234567890"
-	d128, _ := primitive.ParseDecimal128(dstr)
+	d128, _ := bson.ParseDecimal128(dstr)
 	tt.Equal(t, d128, slipmongo.ToBson(map[string]any{"$decimal128": dstr}))
-	tt.Equal(t, primitive.Null{}, slipmongo.ToBson(nil))
-	// primitive.DateTime rounds to milliseconds
+	tt.Equal(t, bson.Null{}, slipmongo.ToBson(nil))
+	// bson.DateTime rounds to milliseconds
 	tm := time.Unix(0, 1708179079_123456789).UTC()
-	tt.Equal(t, primitive.NewDateTimeFromTime(tm), slipmongo.ToBson(tm))
+	tt.Equal(t, bson.NewDateTimeFromTime(tm), slipmongo.ToBson(tm))
 	tt.Equal(t, int32(71), slipmongo.ToBson(int8(71)))
 	tt.Equal(t, int32(71), slipmongo.ToBson(int16(71)))
 	tt.Equal(t, int32(71), slipmongo.ToBson(uint8(71)))
@@ -59,12 +58,12 @@ func TestToBsonNonSlip(t *testing.T) {
 	tt.Equal(t, int64(2147483648), slipmongo.ToBson(uint(2147483648)))
 	tt.Equal(t, int32(71), slipmongo.ToBson(uint(71)))
 	tt.Equal(t, 2.5, slipmongo.ToBson(float32(2.5)))
-	d128, _ = primitive.ParseDecimal128("1234567890123456789")
+	d128, _ = bson.ParseDecimal128("1234567890123456789")
 	tt.Equal(t, d128, slipmongo.ToBson(big.NewInt(1234567890123456789)))
 	bbn := big.NewInt(int64(1234567890123456789))
 	bbn = bbn.Mul(bbn, bbn)
 	tt.Equal(t, "1524157875323883675019051998750190521", slipmongo.ToBson(bbn))
-	tt.Equal(t, primitive.Null{}, slipmongo.ToBson(primitive.Null{}))
+	tt.Equal(t, bson.Null{}, slipmongo.ToBson(bson.Null{}))
 	tt.Panic(t, func() { _ = slipmongo.ToBson(struct{}{}) })
 }
 
@@ -93,16 +92,16 @@ func TestToBsonSlip(t *testing.T) {
 	tt.Equal(t, 2.5, slipmongo.ToBson(slip.DoubleFloat(2.5)))
 	tt.Equal(t, 2.5, slipmongo.ToBson(slip.SingleFloat(2.5)))
 	tm := time.Unix(0, 1708179079_123456789).UTC()
-	tt.Equal(t, primitive.NewDateTimeFromTime(tm), slipmongo.ToBson(slip.Time(tm)))
+	tt.Equal(t, bson.NewDateTimeFromTime(tm), slipmongo.ToBson(slip.Time(tm)))
 	tt.Equal(t,
-		primitive.Binary{
+		bson.Binary{
 			Subtype: bson.TypeBinaryUUID,
 			Data: []byte{
 				0x6e, 0xf1, 0x69, 0x94, 0x70, 0x1d, 0x44, 0xd5, 0x87, 0xec, 0x7e, 0xf3, 0xe2, 0xe5, 0x70, 0x9b,
 			},
 		},
 		slipmongo.ToBson(gi.UUIDParse("6ef16994-701d-44d5-87ec-7ef3e2e5709b")))
-	d128, _ := primitive.ParseDecimal128("1234567890123456789")
+	d128, _ := bson.ParseDecimal128("1234567890123456789")
 	tt.Equal(t, d128, slipmongo.ToBson((*slip.Bignum)(big.NewInt(1234567890123456789))))
 	bbn := big.NewInt(int64(1234567890123456789))
 	bbn = bbn.Mul(bbn, bbn)
@@ -121,7 +120,7 @@ func TestSimplifyBson(t *testing.T) {
 	tt.Equal(t, nil, slipmongo.SimplifyBson(nil, true))
 	tt.Equal(t, 2.5, slipmongo.SimplifyBson(2.5, true))
 	oid := "0123456789abcdef01234567"
-	poid, _ := primitive.ObjectIDFromHex(oid)
+	poid, _ := bson.ObjectIDFromHex(oid)
 	tt.Equal(t, map[string]any{"$toObjectId": oid}, slipmongo.SimplifyBson(poid, true))
 	tt.Equal(t, "quux", slipmongo.SimplifyBson([]byte("quux"), true))
 	tt.Equal(t, int64(71), slipmongo.SimplifyBson(int32(71), true))
@@ -131,23 +130,23 @@ func TestSimplifyBson(t *testing.T) {
 	tt.Equal(t, []any{int64(1), int64(2)}, slipmongo.SimplifyBson(bson.A{int32(1), int64(2)}, true))
 	tt.Equal(t, map[string]any{"a": int64(1)}, slipmongo.SimplifyBson(map[string]any{"a": int64(1)}, true))
 	tt.Equal(t, []any{int64(1), int64(2)}, slipmongo.SimplifyBson([]any{int32(1), int64(2)}, true))
-	tt.Equal(t, nil, slipmongo.SimplifyBson(primitive.Null{}, true))
-	tt.Equal(t, "quux", slipmongo.SimplifyBson(primitive.Symbol("quux"), true))
+	tt.Equal(t, nil, slipmongo.SimplifyBson(bson.Null{}, true))
+	tt.Equal(t, "quux", slipmongo.SimplifyBson(bson.Symbol("quux"), true))
 	tm := time.Unix(0, 1708179079_123000000).UTC()
-	tt.Equal(t, tm, slipmongo.SimplifyBson(primitive.NewDateTimeFromTime(tm), true))
+	tt.Equal(t, tm, slipmongo.SimplifyBson(bson.NewDateTimeFromTime(tm), true))
 	dstr := "123456789012345678901234567890"
-	d128, _ := primitive.ParseDecimal128(dstr)
+	d128, _ := bson.ParseDecimal128(dstr)
 	tt.Equal(t, map[string]any{"$decimal128": dstr}, slipmongo.SimplifyBson(d128, true))
 	tt.Equal(t,
 		map[string]any{"$timestamp": int64(1708179079_123456789)},
-		slipmongo.SimplifyBson(primitive.Timestamp{T: 397716434, I: 2011714325}, true))
-	tt.Equal(t, "abc", slipmongo.SimplifyBson(primitive.Regex{Pattern: "abc"}, true))
-	tt.Equal(t, "abc/i", slipmongo.SimplifyBson(primitive.Regex{Pattern: "abc", Options: "i"}, true))
-	tt.Equal(t, "a = 1;", slipmongo.SimplifyBson(primitive.JavaScript("a = 1;"), true))
+		slipmongo.SimplifyBson(bson.Timestamp{T: 397716434, I: 2011714325}, true))
+	tt.Equal(t, "abc", slipmongo.SimplifyBson(bson.Regex{Pattern: "abc"}, true))
+	tt.Equal(t, "abc/i", slipmongo.SimplifyBson(bson.Regex{Pattern: "abc", Options: "i"}, true))
+	tt.Equal(t, "a = 1;", slipmongo.SimplifyBson(bson.JavaScript("a = 1;"), true))
 	tt.Equal(t,
 		map[string]any{"$uuid": "6ef16994-701d-44d5-87ec-7ef3e2e5709b"},
 		slipmongo.SimplifyBson(
-			primitive.Binary{
+			bson.Binary{
 				Subtype: bson.TypeBinaryUUID,
 				Data: []byte{
 					0x6e, 0xf1, 0x69, 0x94, 0x70, 0x1d, 0x44, 0xd5, 0x87, 0xec, 0x7e, 0xf3, 0xe2, 0xe5, 0x70, 0x9b,
@@ -158,7 +157,7 @@ func TestSimplifyBson(t *testing.T) {
 	tt.Equal(t,
 		map[string]any{"$md5": "6ef16994701d44d587ec7ef3e2e5709b"},
 		slipmongo.SimplifyBson(
-			primitive.Binary{
+			bson.Binary{
 				Subtype: bson.TypeBinaryMD5,
 				Data: []byte{
 					0x6e, 0xf1, 0x69, 0x94, 0x70, 0x1d, 0x44, 0xd5, 0x87, 0xec, 0x7e, 0xf3, 0xe2, 0xe5, 0x70, 0x9b,
@@ -167,7 +166,7 @@ func TestSimplifyBson(t *testing.T) {
 	tt.Equal(t,
 		"quux",
 		slipmongo.SimplifyBson(
-			primitive.Binary{
+			bson.Binary{
 				Subtype: bson.TypeBinaryGeneric,
 				Data:    []byte("quux"),
 			}, true))
@@ -185,10 +184,10 @@ func TestBsonToObject(t *testing.T) {
 	tt.Equal(t, slip.Fixnum(71), slipmongo.BsonToObject(int(71), true))
 	tt.Equal(t, slip.DoubleFloat(2.5), slipmongo.BsonToObject(float64(2.5), true))
 	tm := time.Unix(0, 1708179079_123000000).UTC()
-	tt.Equal(t, slip.Time(tm), slipmongo.BsonToObject(primitive.NewDateTimeFromTime(tm), true))
+	tt.Equal(t, slip.Time(tm), slipmongo.BsonToObject(bson.NewDateTimeFromTime(tm), true))
 	tt.Equal(t, slip.Time(tm), slipmongo.BsonToObject(tm, true))
 	oid := "0123456789abcdef01234567"
-	poid, _ := primitive.ObjectIDFromHex(oid)
+	poid, _ := bson.ObjectIDFromHex(oid)
 	tt.Equal(t,
 		slip.List{slip.List{slip.String("$toObjectId"), slip.Tail{Value: slip.String(oid)}}},
 		slipmongo.BsonToObject(poid, true))
@@ -214,29 +213,29 @@ func TestBsonToObject(t *testing.T) {
 		slip.List{slip.List{slip.String("a"), slip.Fixnum(1), slip.Fixnum(2)}},
 		slipmongo.BsonToObject(map[string]any{"a": []any{int32(1), int32(2)}}, true))
 
-	tt.Equal(t, slip.Symbol("quux"), slipmongo.BsonToObject(primitive.Symbol("quux"), true))
+	tt.Equal(t, slip.Symbol("quux"), slipmongo.BsonToObject(bson.Symbol("quux"), true))
 	tt.Equal(t,
 		slip.List{slip.Fixnum(1), slip.Fixnum(2)},
 		slipmongo.BsonToObject([]any{int32(1), int32(2)}, true))
 	dstr := "1234567890123456789"
-	d128, _ := primitive.ParseDecimal128(dstr)
+	d128, _ := bson.ParseDecimal128(dstr)
 	tt.Equal(t, (*slip.Bignum)(big.NewInt(1234567890123456789)), slipmongo.BsonToObject(d128, true))
 	dstr = "12345678901234567890.123"
-	d128, _ = primitive.ParseDecimal128(dstr)
+	d128, _ = bson.ParseDecimal128(dstr)
 	tt.Equal(t,
 		slip.List{slip.List{slip.String("$decimal128"), slip.Tail{Value: slip.String("12345678901234567890.123")}}},
 		slipmongo.BsonToObject(d128, true))
 	tt.Equal(t,
 		slip.List{slip.List{slip.String("$timestamp"), slip.Tail{Value: slip.Fixnum(1708179079_123456789)}}},
-		slipmongo.BsonToObject(primitive.Timestamp{T: 397716434, I: 2011714325}, true))
-	tt.Equal(t, slip.String("abc"), slipmongo.BsonToObject(primitive.Regex{Pattern: "abc"}, true))
-	tt.Equal(t, slip.String("abc/i"), slipmongo.BsonToObject(primitive.Regex{Pattern: "abc", Options: "i"}, true))
-	tt.Equal(t, slip.String("a = 1;"), slipmongo.BsonToObject(primitive.JavaScript("a = 1;"), true))
+		slipmongo.BsonToObject(bson.Timestamp{T: 397716434, I: 2011714325}, true))
+	tt.Equal(t, slip.String("abc"), slipmongo.BsonToObject(bson.Regex{Pattern: "abc"}, true))
+	tt.Equal(t, slip.String("abc/i"), slipmongo.BsonToObject(bson.Regex{Pattern: "abc", Options: "i"}, true))
+	tt.Equal(t, slip.String("a = 1;"), slipmongo.BsonToObject(bson.JavaScript("a = 1;"), true))
 
 	tt.Equal(t,
 		gi.UUIDParse("6ef16994-701d-44d5-87ec-7ef3e2e5709b"),
 		slipmongo.BsonToObject(
-			primitive.Binary{
+			bson.Binary{
 				Subtype: bson.TypeBinaryUUID,
 				Data: []byte{
 					0x6e, 0xf1, 0x69, 0x94, 0x70, 0x1d, 0x44, 0xd5, 0x87, 0xec, 0x7e, 0xf3, 0xe2, 0xe5, 0x70, 0x9b,
@@ -248,7 +247,7 @@ func TestBsonToObject(t *testing.T) {
 			slip.List{slip.String("$md5"), slip.Tail{Value: slip.String("6ef16994701d44d587ec7ef3e2e5709b")}},
 		},
 		slipmongo.BsonToObject(
-			primitive.Binary{
+			bson.Binary{
 				Subtype: bson.TypeBinaryMD5,
 				Data: []byte{
 					0x6e, 0xf1, 0x69, 0x94, 0x70, 0x1d, 0x44, 0xd5, 0x87, 0xec, 0x7e, 0xf3, 0xe2, 0xe5, 0x70, 0x9b,
@@ -257,7 +256,7 @@ func TestBsonToObject(t *testing.T) {
 	tt.Equal(t,
 		slip.String("quux"),
 		slipmongo.BsonToObject(
-			primitive.Binary{
+			bson.Binary{
 				Subtype: bson.TypeBinaryGeneric,
 				Data:    []byte("quux"),
 			}, true))

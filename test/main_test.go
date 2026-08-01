@@ -15,8 +15,8 @@ import (
 	"time"
 
 	"github.com/ohler55/ojg/tt"
-	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
+	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
 
 var (
@@ -81,7 +81,8 @@ func startMongoServer() (proc *os.Process) {
 
 	opts := options.Client()
 	opts = opts.ApplyURI(string(mongoURL))
-	mc, err := mongo.Connect(ctx, opts)
+	opts.SetTimeout(time.Second * 1)
+	mc, err := mongo.Connect(opts)
 	if err != nil {
 		panic(err)
 	}

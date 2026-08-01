@@ -7,9 +7,8 @@ import (
 
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/flavors"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type collectionDistinctCaller struct{}
@@ -19,15 +18,17 @@ func (caller collectionDistinctCaller) Call(s *slip.Scope, args slip.List, depth
 
 	field := slip.MustBeString(args[0], "field")
 	filter := ToBson(args[1])
-	if _, ok := filter.(primitive.Null); ok || filter == nil {
+	if _, ok := filter.(bson.Null); ok || filter == nil {
 		filter = bson.D{}
 	}
 	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
 	defer cf()
-	values, err := self.Any.(*mongo.Collection).Distinct(ctx, field, filter)
-	if err != nil {
-		panic(err)
+	dr := self.Any.(*mongo.Collection).Distinct(ctx, field, filter)
+	if dr.Err() != nil {
+		panic(dr.Err())
 	}
+	var values []any
+	_ = dr.Decode(&values)
 	list := make(slip.List, len(values))
 	for i, v := range values {
 		list[i] = BsonToObject(v, false)

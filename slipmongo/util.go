@@ -8,8 +8,7 @@ import (
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/bag"
 	"github.com/ohler55/slip/pkg/flavors"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 func filterFromArg(s *slip.Scope, arg slip.Object, depth int) (filter any) {
@@ -51,10 +50,5 @@ func filterFromArg(s *slip.Scope, arg slip.Object, depth int) (filter any) {
 }
 
 func instTimeout(inst *flavors.Instance) time.Duration {
-	timeout := defaultTimeout
-	client := inst.Get("client").(*flavors.Instance)
-	if tp := client.Any.(*mongo.Client).Timeout(); tp != nil {
-		timeout = *tp
-	}
-	return timeout
+	return defaultTimeout
 }

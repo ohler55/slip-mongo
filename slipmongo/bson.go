@@ -14,8 +14,7 @@ import (
 	"github.com/ohler55/slip/pkg/bag"
 	"github.com/ohler55/slip/pkg/flavors"
 	"github.com/ohler55/slip/pkg/gi"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/v2/bson"
 )
 
 const hexChars = "0123456789abcdef"
@@ -51,26 +50,26 @@ retry:
 			switch strings.ToLower(key) {
 			case "$timestamp":
 				if nsec, ok := v.(int64); ok {
-					bs = primitive.Timestamp{
+					bs = bson.Timestamp{
 						T: uint32(uint64(nsec) >> 32),
 						I: uint32(uint64(nsec) & 0x00000000FFFFFFFF),
 					}
 				}
 			case "$decimal128":
 				if str, ok := v.(string); ok {
-					if dec, err := primitive.ParseDecimal128(str); err == nil {
+					if dec, err := bson.ParseDecimal128(str); err == nil {
 						bs = dec
 					}
 				}
 			case "$uuid":
 				if str, ok := v.(string); ok {
 					if u := gi.UUIDParse(str); u[0] != 0 || u[1] != 0 {
-						bs = primitive.Binary{Subtype: bson.TypeBinaryUUID, Data: u.Bytes()}
+						bs = bson.Binary{Subtype: bson.TypeBinaryUUID, Data: u.Bytes()}
 					}
 				}
 			case "$md5":
 				if str, ok := v.(string); ok {
-					pb := primitive.Binary{Subtype: bson.TypeBinaryMD5}
+					pb := bson.Binary{Subtype: bson.TypeBinaryMD5}
 					var err error
 					if pb.Data, err = hex.DecodeString(str); err == nil {
 						bs = pb
@@ -87,9 +86,9 @@ retry:
 		}
 		bs = m
 	case nil:
-		bs = primitive.Null{}
+		bs = bson.Null{}
 	case time.Time:
-		bs = primitive.NewDateTimeFromTime(tv.UTC())
+		bs = bson.NewDateTimeFromTime(tv.UTC())
 
 	case slip.Symbol:
 		if strings.EqualFold(":false", string(tv)) {
@@ -130,9 +129,9 @@ retry:
 	case slip.DoubleFloat:
 		bs = float64(tv)
 	case slip.Time:
-		bs = primitive.NewDateTimeFromTime(time.Time(tv).UTC())
+		bs = bson.NewDateTimeFromTime(time.Time(tv).UTC())
 	case gi.UUID:
-		bs = primitive.Binary{Subtype: bson.TypeBinaryUUID, Data: tv.Bytes()}
+		bs = bson.Binary{Subtype: bson.TypeBinaryUUID, Data: tv.Bytes()}
 	case slip.Tail:
 		value = tv.Value
 		goto retry
@@ -184,15 +183,15 @@ retry:
 
 	case *slip.Bignum:
 		var ok bool
-		if bs, ok = primitive.ParseDecimal128FromBigInt((*big.Int)(tv), 0); !ok {
+		if bs, ok = bson.ParseDecimal128FromBigInt((*big.Int)(tv), 0); !ok {
 			bs = tv.String()
 		}
 	case *big.Int:
 		var ok bool
-		if bs, ok = primitive.ParseDecimal128FromBigInt(tv, 0); !ok {
+		if bs, ok = bson.ParseDecimal128FromBigInt(tv, 0); !ok {
 			bs = tv.String()
 		}
-	case primitive.Null, bson.A, bson.D, bson.E, bson.M:
+	case bson.Null, bson.A, bson.D, bson.E, bson.M:
 		bs = tv
 	default:
 		if slip.True == tv {
@@ -214,7 +213,7 @@ func SimplifyBson(bs any, wrap bool) (sv any) {
 		// leave sv as nil
 	case string, bool, int64, float64, time.Time:
 		sv = bs
-	case primitive.ObjectID:
+	case bson.ObjectID:
 		sv = tb.Hex()
 		if wrap {
 			sv = map[string]any{"$toObjectId": sv}
@@ -257,23 +256,23 @@ func SimplifyBson(bs any, wrap bool) (sv any) {
 			m[k] = SimplifyBson(v, wrap)
 		}
 		sv = m
-	case primitive.Null:
+	case bson.Null:
 		// leave sv as nil
-	case primitive.Symbol:
+	case bson.Symbol:
 		sv = string(tb)
-	case primitive.DateTime:
+	case bson.DateTime:
 		sv = tb.Time().UTC()
-	case primitive.Decimal128:
+	case bson.Decimal128:
 		sv = tb.String()
 		if wrap {
 			sv = map[string]any{"$decimal128": sv}
 		}
-	case primitive.Timestamp:
+	case bson.Timestamp:
 		sv = int64(uint64(tb.T)<<32 | uint64(tb.I))
 		if wrap {
 			sv = map[string]any{"$timestamp": sv}
 		}
-	case primitive.Regex:
+	case bson.Regex:
 		if 0 < len(tb.Options) {
 			rx := make([]byte, 0, len(tb.Pattern)+1+len(tb.Options))
 			rx = append(rx, tb.Pattern...)
@@ -283,9 +282,9 @@ func SimplifyBson(bs any, wrap bool) (sv any) {
 		} else {
 			sv = tb.Pattern
 		}
-	case primitive.JavaScript:
+	case bson.JavaScript:
 		sv = string(tb)
-	case primitive.Binary:
+	case bson.Binary:
 		switch tb.Subtype {
 		case bson.TypeBinaryUUID, bson.TypeBinaryUUIDOld:
 			var b []byte
@@ -333,7 +332,7 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 		obj = slip.DoubleFloat(tv)
 	case time.Time:
 		obj = slip.Time(tv.UTC())
-	case primitive.ObjectID:
+	case bson.ObjectID:
 		obj = slip.String(tv.Hex())
 		if wrap {
 			obj = slip.List{slip.List{slip.String("$toObjectId"), slip.Tail{Value: obj}}}
@@ -388,13 +387,13 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 			}
 		}
 		obj = a
-	case primitive.Null:
+	case bson.Null:
 		// leave sv as nil
-	case primitive.Symbol:
+	case bson.Symbol:
 		obj = slip.Symbol(tv)
-	case primitive.DateTime:
+	case bson.DateTime:
 		obj = slip.Time(tv.Time().UTC())
-	case primitive.Decimal128:
+	case bson.Decimal128:
 		if bi, exp, err := tv.BigInt(); err == nil && exp == 0 {
 			obj = (*slip.Bignum)(bi)
 		} else {
@@ -403,12 +402,12 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 				obj = slip.List{slip.List{slip.String("$decimal128"), slip.Tail{Value: obj}}}
 			}
 		}
-	case primitive.Timestamp:
+	case bson.Timestamp:
 		obj = slip.Fixnum(uint64(tv.T)<<32 | uint64(tv.I))
 		if wrap {
 			obj = slip.List{slip.List{slip.String("$timestamp"), slip.Tail{Value: obj}}}
 		}
-	case primitive.Regex:
+	case bson.Regex:
 		if 0 < len(tv.Options) {
 			rx := make([]byte, 0, len(tv.Pattern)+1+len(tv.Options))
 			rx = append(rx, tv.Pattern...)
@@ -418,9 +417,9 @@ func BsonToObject(value any, wrap bool) (obj slip.Object) {
 		} else {
 			obj = slip.String(tv.Pattern)
 		}
-	case primitive.JavaScript:
+	case bson.JavaScript:
 		obj = slip.String(tv)
-	case primitive.Binary:
+	case bson.Binary:
 		switch tv.Subtype {
 		case bson.TypeBinaryUUID:
 			var u gi.UUID

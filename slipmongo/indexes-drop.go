@@ -7,7 +7,7 @@ import (
 
 	"github.com/ohler55/slip"
 	"github.com/ohler55/slip/pkg/flavors"
-	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo"
 )
 
 type indexesDropCaller struct{}
@@ -24,9 +24,9 @@ func (caller indexesDropCaller) Call(s *slip.Scope, args slip.List, _ int) slip.
 
 	var err error
 	if 0 < len(name) {
-		_, err = self.Any.(mongo.IndexView).DropOne(ctx, name)
+		err = self.Any.(mongo.IndexView).DropOne(ctx, name)
 	} else {
-		_, err = self.Any.(mongo.IndexView).DropAll(ctx)
+		err = self.Any.(mongo.IndexView).DropAll(ctx)
 	}
 	if err != nil {
 		panic(err)

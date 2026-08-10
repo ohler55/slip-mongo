@@ -21,4 +21,4 @@ require (
 	golang.org/x/text v0.40.0 // indirect
 )
 
-// replace github.com/ohler55/slip => ../slip
+replace github.com/ohler55/slip => ../slip

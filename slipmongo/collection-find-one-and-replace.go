@@ -40,7 +40,7 @@ func (caller collectionFindOneAndReplaceCaller) Call(s *slip.Scope, args slip.Li
 	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":wrap")); has && value != nil {
 		wrap = true
 	}
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, kargs, depth))
 	defer cf()
 
 	filter := ToBson(args[0])
@@ -114,6 +114,11 @@ depending on the value of the _:after_ keywork argument.`,
 				Name: ":wrap",
 				Type: "boolean",
 				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "object",

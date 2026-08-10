@@ -12,12 +12,12 @@ import (
 
 type collectionUpdateByIDCaller struct{}
 
-func (caller collectionUpdateByIDCaller) Call(s *slip.Scope, args slip.List, _ int) (count slip.Object) {
+func (caller collectionUpdateByIDCaller) Call(s *slip.Scope, args slip.List, depth int) (count slip.Object) {
 	self := s.Get("self").(*flavors.Instance)
 
 	id := ToBson(args[0])
 	update := ToBson(args[1])
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args[2:], depth))
 	defer cf()
 
 	if ur, err := self.Any.(*mongo.Collection).UpdateByID(ctx, id, update); err == nil {
@@ -42,6 +42,12 @@ func (caller collectionUpdateByIDCaller) FuncDocs() *slip.FuncDoc {
 				Name: "update",
 				Type: "bag|list",
 				Text: "The modification directives to apply to a record.",
+			},
+			{Name: "&key"},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "fixnum",

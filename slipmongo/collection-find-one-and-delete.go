@@ -24,19 +24,20 @@ func (caller collectionFindOneAndDeleteCaller) Call(s *slip.Scope, args slip.Lis
 		wrap   bool
 	)
 	opts := options.FindOneAndDelete()
-	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":projection")); has {
+	kargs := args[1:]
+	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":projection")); has {
 		opts = opts.SetProjection(ToBson(value))
 	}
-	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":sort")); has {
+	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":sort")); has {
 		opts = opts.SetSort(ToBson(value))
 	}
-	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":native")); has && value != nil {
+	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":native")); has && value != nil {
 		native = true
 	}
-	if value, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":wrap")); has && value != nil {
+	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":wrap")); has && value != nil {
 		wrap = true
 	}
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, kargs, depth))
 	defer cf()
 
 	filter := ToBson(args[0])
@@ -98,6 +99,11 @@ That document is returned.`,
 				Name: ":wrap",
 				Type: "boolean",
 				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "object",

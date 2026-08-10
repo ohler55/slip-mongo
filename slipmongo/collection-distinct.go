@@ -21,7 +21,7 @@ func (caller collectionDistinctCaller) Call(s *slip.Scope, args slip.List, depth
 	if _, ok := filter.(bson.Null); ok || filter == nil {
 		filter = bson.D{}
 	}
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args[2:], depth))
 	defer cf()
 	dr := self.Any.(*mongo.Collection).Distinct(ctx, field, filter)
 	if dr.Err() != nil {
@@ -51,6 +51,12 @@ and returns a list of all the distinct values of the _field_ in the matching rec
 				Name: "filter",
 				Type: "bag|list",
 				Text: "Filter for the search.",
+			},
+			{Name: "&key"},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "list",

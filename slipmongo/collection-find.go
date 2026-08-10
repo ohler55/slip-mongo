@@ -61,7 +61,7 @@ func (caller collectionFindCaller) Call(s *slip.Scope, args slip.List, depth int
 	if value, has := slip.GetArgsKeyValue(kargs, slip.Symbol(":wrap")); has && value != nil {
 		wrap = true
 	}
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, kargs, depth))
 	defer cf()
 
 	fun := cl.ResolveToCaller(s, args[0], depth)
@@ -149,6 +149,11 @@ func (caller collectionFindCaller) FuncDocs() *slip.FuncDoc {
 				Name: ":batch",
 				Type: "fixnum",
 				Text: "Size of each fetch from the server.",
+			},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 	}

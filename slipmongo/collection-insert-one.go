@@ -12,7 +12,7 @@ import (
 
 type collectionInsertOneCaller struct{}
 
-func (caller collectionInsertOneCaller) Call(s *slip.Scope, args slip.List, _ int) (id slip.Object) {
+func (caller collectionInsertOneCaller) Call(s *slip.Scope, args slip.List, depth int) (id slip.Object) {
 	self := s.Get("self").(*flavors.Instance)
 
 	var wrap bool
@@ -20,7 +20,7 @@ func (caller collectionInsertOneCaller) Call(s *slip.Scope, args slip.List, _ in
 		wrap = true
 	}
 	doc := ToBson(args[0])
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args[1:], depth))
 	defer cf()
 
 	if ior, err := self.Any.(*mongo.Collection).InsertOne(ctx, doc); err == nil {
@@ -49,6 +49,11 @@ id but can be what ever the caller specifies in the record.`,
 				Name: ":wrap",
 				Type: "boolean",
 				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "object",

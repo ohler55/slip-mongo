@@ -6,8 +6,6 @@ github.com/klauspost/compress v1.18.0 h1:c/Cqfb0r+Yi+JtIEq73FWXVkRonBlf0CRNYc8Zt
 github.com/klauspost/compress v1.18.0/go.mod h1:2Pp+KzxcywXVXMr50+X0Q/Lsb43OQHYWRCY2AiWywWQ=
 github.com/ohler55/ojg v1.28.3 h1:h+tLmAUQTixzUEXwMVAtnl2Y0ZOQywCjZrtE6MGHIm8=
 github.com/ohler55/ojg v1.28.3/go.mod h1:/Y5dGWkekv9ocnUixuETqiL58f+5pAsUfg5P8e7Pa2o=
-github.com/ohler55/slip v1.5.0 h1:0g6pXJxCKM+2sA0gsDMZ2Qfl2szTWx5vGPS6T8OhhEE=
-github.com/ohler55/slip v1.5.0/go.mod h1:cT3ZoM4tcM5cf0zClzLIDeHoVogH90tvWF+VPWoeOZ8=
 github.com/xdg-go/pbkdf2 v1.0.0 h1:Su7DPu48wXMwC3bs7MCNG+z4FhcyEuz5dlvchbq0B0c=
 github.com/xdg-go/pbkdf2 v1.0.0/go.mod h1:jrpuAogTd400dnrH08LKmI/xc1MbPOebTwRqcT5RDeI=
 github.com/xdg-go/scram v1.2.0 h1:bYKF2AEwG5rqd1BumT4gAnvwU/M9nBp2pTSxeZw7Wvs=

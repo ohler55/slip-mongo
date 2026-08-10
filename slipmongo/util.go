@@ -49,6 +49,14 @@ func filterFromArg(s *slip.Scope, arg slip.Object, depth int) (filter any) {
 	return
 }
 
-func instTimeout(inst *flavors.Instance) time.Duration {
-	return defaultTimeout
+func timeoutFromArgs(s *slip.Scope, args slip.List, depth int) time.Duration {
+	timeout := defaultTimeout
+	if v, has := slip.GetArgsKeyValue(args, slip.Symbol(":timeout")); has {
+		if num, ok := v.(slip.Fixnum); ok {
+			timeout = time.Second * time.Duration(num)
+		} else {
+			slip.TypePanic(s, depth, ":timeout", v, "fixnum")
+		}
+	}
+	return timeout
 }

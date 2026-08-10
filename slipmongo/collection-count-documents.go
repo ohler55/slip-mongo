@@ -36,7 +36,7 @@ func (caller collectionCountDocumentsCaller) Call(s *slip.Scope, args slip.List,
 	if _, ok := filter.(bson.Null); ok || filter == nil {
 		filter = bson.D{}
 	}
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args[1:], depth))
 	defer cf()
 
 	cnt, err := self.Any.(*mongo.Collection).CountDocuments(ctx, filter, opts)
@@ -67,6 +67,11 @@ by _skip_ and _limit_ values.`,
 				Name: ":limit",
 				Type: "fixnum",
 				Text: "Maximum number of records to count.",
+			},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "fixnum",

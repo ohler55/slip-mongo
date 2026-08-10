@@ -52,16 +52,9 @@ type Connect struct {
 // Call the function with the arguments provided.
 func (f *Connect) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
 	slip.CheckArgCount(s, depth, f, args, 1, 3)
-	timeout := defaultTimeout
 	opts := options.Client()
 	opts = opts.ApplyURI(string(slip.MustBeString(args[0], "url")))
-	if v, has := slip.GetArgsKeyValue(args[1:], slip.Symbol(":timeout")); has {
-		if num, ok := v.(slip.Fixnum); ok {
-			timeout = time.Second * time.Duration(num)
-		} else {
-			slip.TypePanic(s, depth, ":timeout", v, "fixnum")
-		}
-	}
+	timeout := timeoutFromArgs(s, args[1:], depth)
 	opts = opts.SetTimeout(timeout)
 	mc, err := mongo.Connect(opts)
 	if err != nil {

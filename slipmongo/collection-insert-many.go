@@ -27,7 +27,7 @@ func (caller collectionInsertManyCaller) Call(s *slip.Scope, args slip.List, dep
 	for i, val := range list {
 		docs[i] = ToBson(val)
 	}
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args[1:], depth))
 	defer cf()
 
 	if imr, err := self.Any.(*mongo.Collection).InsertMany(ctx, docs); err == nil {
@@ -60,6 +60,11 @@ specifies in the record.`,
 				Name: ":wrap",
 				Type: "boolean",
 				Text: "If true wrap non-native such as ObjectId with an indicator of the type.",
+			},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "list",

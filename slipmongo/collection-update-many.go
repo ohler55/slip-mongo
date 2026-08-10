@@ -13,7 +13,7 @@ import (
 
 type collectionUpdateManyCaller struct{}
 
-func (caller collectionUpdateManyCaller) Call(s *slip.Scope, args slip.List, _ int) (count slip.Object) {
+func (caller collectionUpdateManyCaller) Call(s *slip.Scope, args slip.List, depth int) (count slip.Object) {
 	self := s.Get("self").(*flavors.Instance)
 
 	filter := ToBson(args[0])
@@ -21,7 +21,7 @@ func (caller collectionUpdateManyCaller) Call(s *slip.Scope, args slip.List, _ i
 		filter = bson.D{}
 	}
 	update := ToBson(args[1])
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args[2:], depth))
 	defer cf()
 
 	if ur, err := self.Any.(*mongo.Collection).UpdateMany(ctx, filter, update); err == nil {
@@ -48,6 +48,12 @@ and used as the filter. The number of records modified is returned.`,
 				Name: "update",
 				Type: "bag|list",
 				Text: "The modification directives to apply to a record.",
+			},
+			{Name: "&key"},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "fixnum",

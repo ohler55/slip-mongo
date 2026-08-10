@@ -12,10 +12,10 @@ import (
 
 type databaseDropCaller struct{}
 
-func (caller databaseDropCaller) Call(s *slip.Scope, args slip.List, _ int) slip.Object {
+func (caller databaseDropCaller) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
 	self := s.Get("self").(*flavors.Instance)
 
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args, depth))
 	defer cf()
 
 	if err := self.Any.(*mongo.Database).Drop(ctx); err != nil {
@@ -28,5 +28,13 @@ func (caller databaseDropCaller) FuncDocs() *slip.FuncDoc {
 	return &slip.FuncDoc{
 		Name: ":drop",
 		Text: `Drops the database.`,
+		Args: []*slip.DocArg{
+			{Name: "&key"},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
+			},
+		},
 	}
 }

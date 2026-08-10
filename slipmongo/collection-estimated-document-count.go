@@ -15,7 +15,7 @@ type collectionEstimatedDocumentCountCaller struct{}
 func (caller collectionEstimatedDocumentCountCaller) Call(s *slip.Scope, args slip.List, depth int) slip.Object {
 	self := s.Get("self").(*flavors.Instance)
 
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args, depth))
 	defer cf()
 
 	cnt, err := self.Any.(*mongo.Collection).EstimatedDocumentCount(ctx)
@@ -27,8 +27,16 @@ func (caller collectionEstimatedDocumentCountCaller) Call(s *slip.Scope, args sl
 
 func (caller collectionEstimatedDocumentCountCaller) FuncDocs() *slip.FuncDoc {
 	return &slip.FuncDoc{
-		Name:   ":estimated-document-count",
-		Text:   `Returns the estimated number of documents in the collection.`,
+		Name: ":estimated-document-count",
+		Text: `Returns the estimated number of documents in the collection.`,
+		Args: []*slip.DocArg{
+			{Name: "&key"},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
+			},
+		},
 		Return: "fixnum",
 	}
 }

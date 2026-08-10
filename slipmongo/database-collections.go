@@ -17,7 +17,7 @@ func (caller databaseCollectionsCaller) Call(s *slip.Scope, args slip.List, dept
 	self := s.Get("self").(*flavors.Instance)
 	db := self.Any.(*mongo.Database)
 
-	ctx, cf := context.WithTimeout(context.Background(), instTimeout(self))
+	ctx, cf := context.WithTimeout(context.Background(), timeoutFromArgs(s, args[1:], depth))
 	defer cf()
 
 	var filter any
@@ -57,6 +57,12 @@ the type which can be either :collection or :view and then a read-only flag.`,
 				Name: "filter",
 				Type: "bag|assoc|string",
 				Text: "Filter to be applied to the collections list. A _string_ value is taken as a regexp.",
+			},
+			{Name: "&key"},
+			{
+				Name: "timeout",
+				Type: "fixnum",
+				Text: "is the number of seconds to wait before giving up",
 			},
 		},
 		Return: "list",

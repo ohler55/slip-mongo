@@ -3,7 +3,7 @@ module github.com/ohler55/slip-mongo
 go 1.26
 
 require (
-	github.com/ohler55/ojg v1.28.3
+	github.com/ohler55/ojg v1.28.4
 	github.com/ohler55/slip v1.5.0
 	go.mongodb.org/mongo-driver/v2 v2.8.0
 )
